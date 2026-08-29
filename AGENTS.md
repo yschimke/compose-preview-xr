@@ -93,9 +93,22 @@ otherwise.
 
 ## Releasing
 
-Tag `vX.Y.Z` and push it; [`release.yml`](.github/workflows/release.yml) builds all three platforms
-and attaches the tarballs. Then point the `xr-composite` pin in upstream's
-`gradle/libs.versions.toml` at that version.
+Driven by release-please, so **commit subjects decide the version**. Conventional commits are not
+cosmetic here: `fix:` cuts a patch, `feat:` a minor, `feat!:` or a `BREAKING CHANGE:` footer a
+major. A commit whose subject release-please cannot parse contributes nothing to the changelog and
+may leave the release PR proposing no bump at all.
 
-Consumers resolve the binary **by that pin**, so a release nobody pins reaches nobody, and a pin
-naming a release that does not exist degrades silently into "no composite". Both halves, always.
+1. Merge the `chore(main): release X.Y.Z` pull request release-please keeps open. That creates the
+   tag and the Release, then — in the same run — builds all three platforms, attaches the tarballs,
+   and verifies all three are present.
+2. Point the `xr-composite` pin in upstream's `gradle/libs.versions.toml` at `X.Y.Z`.
+
+Both halves, always. Consumers resolve the binary **by that pin**, so a release nobody pins reaches
+nobody, and a pin naming a release that does not exist degrades silently into "no composite" —
+every provisioning failure downstream is a graceful skip, which is exactly why the release verifies
+its own assets rather than trusting the upload step's exit code.
+
+`release.yml` also accepts a hand-pushed `v*` tag and a manual dispatch for re-attaching assets to
+an existing Release; neither is the normal path. Note that a tag created by release-please's
+`GITHUB_TOKEN` does **not** trigger `on: push: tags` — that is why `release-please.yml` calls
+`release.yml` directly rather than relying on the tag.

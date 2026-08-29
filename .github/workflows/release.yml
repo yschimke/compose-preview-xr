@@ -8,9 +8,13 @@ name: release
 # that by giving it a version pin; this repository is where that pin's releases now come from.
 #
 # Cutting one:
-#   1. tag `vX.Y.Z` here and push the tag; this workflow builds all three platforms and creates
-#      the Release with the tarballs attached;
+#   1. merge the "chore(main): release X.Y.Z" pull request release-please keeps open. That creates
+#      the tag and the Release and, in the same run, calls this workflow to build all three
+#      platforms and attach the tarballs;
 #   2. point the `xr-composite` pin in compose-ai-tools' gradle/libs.versions.toml at X.Y.Z.
+#
+# The tag-push and dispatch triggers below are for a hand-cut tag and for re-running the asset
+# upload onto an existing Release; neither is the normal path.
 #
 # Until compose-ai-tools' `XrCompositeProvision.assetUrl` is switched to this repository, its CLI
 # still fetches assets from the compose-ai-tools release namespace. Releases cut here before that
@@ -18,19 +22,31 @@ name: release
 # provisioner resolving a tag that does not exist. See compose-ai-tools#4774 item 4.
 
 on:
+  # Primary path: release-please calls this after it creates the tag and Release. A tag created
+  # with GITHUB_TOKEN does NOT trigger `on: push: tags`, so chaining is the only thing that works.
+  workflow_call:
+    inputs:
+      tag:
+        description: 'Tag whose Release the assets attach to, e.g. v1.2.3.'
+        required: true
+        type: string
+  # For a tag a human pushes by hand, which does trigger workflows.
   push:
     tags: ['v*']
+  # For re-running assets onto an existing Release after a partial upload.
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Version to build and attach to an existing v<version> Release.'
+      tag:
+        description: 'Tag whose Release the assets attach to, e.g. v1.2.3.'
         required: true
 
 permissions:
   contents: read
 
 concurrency:
-  group: release-${{ github.ref_name }}
+  # Key on the tag being released. Under workflow_call `github.ref_name` is the caller's branch
+  # (main), so keying on it would put every release in one slot alongside ordinary main pushes.
+  group: release-${{ inputs.tag || github.ref_name }}
   cancel-in-progress: false
 
 jobs:
@@ -52,19 +68,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          # Build the released commit. Under workflow_call the ref is the caller's (main), which
+          # can already have moved past the release PR's merge.
+          ref: ${{ inputs.tag || github.ref }}
           persist-credentials: false
       - name: Derive the version
         shell: bash
         env:
-          INPUT_VERSION: ${{ inputs.version }}
+          # `inputs.tag` covers workflow_call and workflow_dispatch; `github.ref_name` covers a
+          # hand-pushed tag. Read from env rather than templated into the script so a crafted ref
+          # cannot break out of the quoting.
+          INPUT_TAG: ${{ inputs.tag }}
           REF_NAME: ${{ github.ref_name }}
         run: |
           set -euo pipefail
-          version="${INPUT_VERSION:-${REF_NAME#v}}"
-          if [ -z "$version" ]; then
-            echo "::error::could not determine a version from the tag or input."
-            exit 1
-          fi
+          tag="${INPUT_TAG:-$REF_NAME}"
+          case "$tag" in
+            v?*) version="${tag#v}" ;;
+            *)
+              echo "::error::expected a tag like v1.2.3, got '$tag'."
+              exit 1
+              ;;
+          esac
           echo "XR_VERSION=$version" >> "$GITHUB_ENV"
       - uses: ./.github/actions/build-xr-composite
         with:
@@ -101,7 +126,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          TAG_NAME: ${{ github.ref_type == 'tag' && github.ref_name || format('v{0}', inputs.version) }}
+          TAG_NAME: ${{ inputs.tag || github.ref_name }}
         run: |
           set -euo pipefail
           ls -l artifacts

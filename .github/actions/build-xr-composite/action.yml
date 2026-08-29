@@ -1,6 +1,6 @@
 name: Build xr-composite
 description: >
-  Build the native xr-composite tool (renderers/xr-composite) against the pinned
+  Build the native xr-composite tool (this repository's root) against the pinned
   Filament desktop SDK for the current runner OS and stage the binary + compiled
   materials into a flat dist/ directory. Build-only (no rendering), so no Xvfb /
   Mesa needed. Shared by the CI build workflow and the release asset job so the
@@ -90,7 +90,7 @@ runs:
       shell: bash
       run: |
         set -euo pipefail
-        common=(-S renderers/xr-composite -B renderers/xr-composite/build
+        common=(-S . -B build
                 -DCMAKE_BUILD_TYPE=Release "-DFILAMENT_SDK=${FILAMENT_SDK}")
         if [ "$RUNNER_OS" = "Windows" ]; then
           # MSVC multi-config generator; CMakeLists pins the static /MT runtime.
@@ -102,7 +102,7 @@ runs:
 
     - name: Build
       shell: bash
-      run: cmake --build renderers/xr-composite/build --config Release
+      run: cmake --build build --config Release
 
     # The Visual Studio generator nests outputs under a per-config subdir; Ninja
     # writes them at the build root. Stage both the binary and materials/ into a
@@ -111,7 +111,7 @@ runs:
       shell: bash
       run: |
         set -euo pipefail
-        build=renderers/xr-composite/build
+        build=build
         dist=dist
         rm -rf "$dist"
         mkdir -p "$dist"
