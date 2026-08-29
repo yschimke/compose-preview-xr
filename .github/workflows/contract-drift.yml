@@ -49,7 +49,7 @@ jobs:
     name: Generated mirrors match the pinned upstream schemas
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
@@ -65,16 +65,16 @@ jobs:
           echo "ref=$ref" >> "$GITHUB_OUTPUT"
           echo "pinned to compose-ai-tools@$ref"
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           repository: yschimke/compose-ai-tools
           ref: ${{ steps.pin.outputs.ref }}
           path: upstream
           persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Diff every generated mirror against upstream's regenerated copy
         run: |
