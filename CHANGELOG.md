@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/yschimke/compose-preview-xr/compare/v1.0.0...v1.0.1) (2026-08-29)
+
+
+### Bug Fixes
+
+* support Filament 1.76 cubemap uploads ([#9](https://github.com/yschimke/compose-preview-xr/issues/9)) ([f4317c5](https://github.com/yschimke/compose-preview-xr/commit/f4317c5ab888193402c6d8c9f8c740b223cc0f00))
+
 ## 1.0.0 (2026-08-29)
 
 
