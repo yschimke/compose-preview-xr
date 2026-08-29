@@ -3,6 +3,10 @@
 # build/sdk) and builds with CMake + Ninja. See README.md for the headless render recipe.
 set -euo pipefail
 
+# Keep in step with `filament-version` in .github/actions/build-xr-composite/action.yml —
+# CI builds against that one, this is what a local ./build.sh uses. Renovate moves both
+# together off the marker below; see renovate.json.
+# renovate: datasource=github-releases depName=google/filament
 FILAMENT_VERSION="${FILAMENT_VERSION:-v1.71.5}"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD_DIR="${HERE}/build"
