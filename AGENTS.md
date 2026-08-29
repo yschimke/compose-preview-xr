@@ -47,14 +47,23 @@ This is the load-bearing constraint of the split. While both sides lived in one 
 boundary: it checks upstream out at the SHA in [`upstream-pin.txt`](upstream-pin.txt), runs
 upstream's own generators, and diffs the result against what is committed here.
 
-To take a contract change:
+To take a contract change: bump `upstream-pin.txt` to the upstream commit carrying it, regenerate
+the three mirrors from an upstream checkout, refresh the vendored `schema/` files, and re-run the
+serve smoke — all in one reviewable commit.
 
-1. bump `upstream-pin.txt` to the upstream commit carrying it;
-2. copy the regenerated `spatial_scene.hpp` / `xr_render_service.hpp` / `xr_render_service.py` and
-   the vendored `schema/` files across;
-3. re-run the serve smoke.
+```sh
+up=/path/to/compose-ai-tools   # checked out at the SHA you are pinning
+node $up/scripts/codegen/gen-spatial-scene.mjs     --emit-cpp    > src/spatial_scene.hpp
+node $up/scripts/codegen/gen-xr-render-service.mjs --emit-cpp    > src/xr_render_service.hpp
+node $up/scripts/codegen/gen-xr-render-service.mjs --emit-python > test/xr_render_service.py
+cp $up/schema/{spatial-scene,xr-render-service}.schema.json schema/
+rsync -a --delete $up/schema/fixtures/spatial-scene/ schema/fixtures/spatial-scene/
+```
 
-All in one reviewable commit. Never edit the header to make a build pass — that decouples what this
+The generators resolve their schema paths from their own location, so they run from anywhere.
+Upstream's `--check` covers only its Kotlin mirror; ours exist nowhere but here, which is why the
+drift job is the only thing standing between a schema change and a binary that silently parses the
+old contract. Never edit the header to make a build pass — that decouples what this
 binary parses from what the contract says, silently, and the whole reason the compositor is
 separately versioned is that its failures are *graceful skips* nobody sees.
 
