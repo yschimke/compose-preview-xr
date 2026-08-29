@@ -7,7 +7,7 @@ set -euo pipefail
 # CI builds against that one, this is what a local ./build.sh uses. Renovate moves both
 # together off the marker below; see renovate.json.
 # renovate: datasource=github-releases depName=google/filament
-FILAMENT_VERSION="${FILAMENT_VERSION:-v1.71.5}"
+FILAMENT_VERSION="${FILAMENT_VERSION:-v1.76.0}"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD_DIR="${HERE}/build"
 SDK_ROOT="${BUILD_DIR}/sdk/${FILAMENT_VERSION}"

@@ -138,7 +138,7 @@ float3 cubeDir(int face, float u, float v) {
 // the lower hemisphere (dir.y < 0), turning the 2-stop gradient into a 3-stop room-like environment
 // with a ceiling, wall, and floor; when unset the lower hemisphere mirrors the original 2-stop
 // horizon→sky interpolation so the legacy look is byte-for-byte preserved. `glow` scales the horizon
-// glow band. RGBA16F (half) texels, one face at a time via Texture::FaceOffsets. The texel buffer is
+// glow band. RGBA16F (half) texels are packed as the six layers of the cubemap. The texel buffer is
 // heap-allocated and freed in the PixelBufferDescriptor callback — Filament reads it on the driver
 // thread during flushAndWait, so it must outlive this call (same idiom as the panel textures below).
 Skybox* buildGradientSkybox(Engine& engine, float3 sky, float3 horizon, float3 floor, bool hasFloor,
@@ -146,8 +146,7 @@ Skybox* buildGradientSkybox(Engine& engine, float3 sky, float3 horizon, float3 f
   constexpr uint32_t kFace = 128;
   constexpr uint32_t kTexelsPerFace = kFace * kFace;
   constexpr uint32_t kChannels = 4;
-  const size_t faceBytes = (size_t)kTexelsPerFace * kChannels * sizeof(half);
-  // 6 faces packed back-to-back; FaceOffsets(faceBytes/elem≈) indexes by element count below.
+  // Six faces packed back-to-back in +X, -X, +Y, -Y, +Z, -Z layer order.
   auto* texels = new half[(size_t)kTexelsPerFace * kChannels * 6];
 
   for (int face = 0; face < 6; ++face) {
@@ -186,12 +185,11 @@ Skybox* buildGradientSkybox(Engine& engine, float3 sky, float3 horizon, float3 f
       .sampler(Texture::Sampler::SAMPLER_CUBEMAP)
       .build(engine);
 
-  Texture::FaceOffsets offsets(faceBytes);  // per-face offset in bytes, +X,-X,+Y,-Y,+Z,-Z
   Texture::PixelBufferDescriptor pbd(
       texels, (size_t)kTexelsPerFace * kChannels * 6 * sizeof(half),
       Texture::Format::RGBA, Texture::Type::HALF,
       [](void* buf, size_t, void*) { delete[] (half*)buf; }, nullptr);
-  cube->setImage(engine, 0, std::move(pbd), offsets);
+  cube->setImage(engine, 0, 0, 0, 0, kFace, kFace, 6, std::move(pbd));
 
   return Skybox::Builder().environment(cube).showSun(false).build(engine);
 }
