@@ -16,6 +16,13 @@ name: contract drift
 # committed here. Using upstream's generator rather than a vendored fork is deliberate — a forked
 # generator is a third thing that can drift, and the point is to have exactly one.
 #
+# The generators emit our three mirrors to STDOUT (`--emit-cpp` / `--emit-python`) rather than
+# writing them into upstream's tree. They used to write files under `renderers/xr-composite/`;
+# compose-ai-tools#4799 deleted that directory when the compositor moved here, so a generator that
+# still wrote there would be emitting into a path no repository has. Upstream's own `--check` now
+# covers only its Kotlin mirror — ours are covered here and nowhere else, which is exactly why this
+# job exists.
+#
 # A failure means one of:
 #   * the contract moved upstream and this repository has not regenerated  -> bump the pin, copy
 #     the regenerated files in, and re-run the smoke;
@@ -69,30 +76,27 @@ jobs:
         with:
           node-version: 20
 
-      - name: Regenerate with upstream's own generators
-        working-directory: upstream
-        run: |
-          set -euo pipefail
-          node scripts/codegen/gen-spatial-scene.mjs
-          node scripts/codegen/gen-xr-render-service.mjs
-
-      - name: Diff every generated mirror against the regenerated copy
+      - name: Diff every generated mirror against upstream's regenerated copy
         run: |
           set -euo pipefail
           status=0
-          # Left: what upstream's generator produced from the pinned schemas.
+          # Left: what upstream's generator produces from the pinned schemas, on stdout.
           # Right: what this repository has committed and actually compiles.
+          #
+          # The generators resolve their schema paths from their own location, not the working
+          # directory, so they run correctly from here without a `working-directory`.
           check() {
-            if ! diff -u "upstream/$1" "$2"; then
-              echo "::error::$2 does not match upstream@$(cat upstream-pin.txt) — see the diff above."
+            local generator="$1" flag="$2" mirror="$3"
+            if ! diff -u <(node "upstream/scripts/codegen/$generator" "$flag") "$mirror"; then
+              echo "::error::$mirror does not match upstream@$(cat upstream-pin.txt) — see the diff above."
               status=1
             else
-              echo "ok: $2"
+              echo "ok: $mirror"
             fi
           }
-          check renderers/xr-composite/src/spatial_scene.hpp     src/spatial_scene.hpp
-          check renderers/xr-composite/src/xr_render_service.hpp src/xr_render_service.hpp
-          check renderers/xr-composite/test/xr_render_service.py test/xr_render_service.py
+          check gen-spatial-scene.mjs      --emit-cpp    src/spatial_scene.hpp
+          check gen-xr-render-service.mjs  --emit-cpp    src/xr_render_service.hpp
+          check gen-xr-render-service.mjs  --emit-python test/xr_render_service.py
           exit $status
 
       - name: Diff the vendored schemas and scene fixture
