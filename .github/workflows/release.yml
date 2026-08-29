@@ -1,0 +1,116 @@
+name: release
+
+# Publish the per-OS compositor tarballs for a tag.
+#
+# This is the release train the split exists to create. In compose-ai-tools the compositor was
+# rebuilt and republished on EVERY release — 226 of them, 1.23 GB, for 13 changes to the C++ —
+# because both consumers addressed the binary by their own version. compose-ai-tools#4773 broke
+# that by giving it a version pin; this repository is where that pin's releases now come from.
+#
+# Cutting one:
+#   1. tag `vX.Y.Z` here and push the tag; this workflow builds all three platforms and creates
+#      the Release with the tarballs attached;
+#   2. point the `xr-composite` pin in compose-ai-tools' gradle/libs.versions.toml at X.Y.Z.
+#
+# Until compose-ai-tools' `XrCompositeProvision.assetUrl` is switched to this repository, its CLI
+# still fetches assets from the compose-ai-tools release namespace. Releases cut here before that
+# switch are published but not yet consumed — deliberately, so the cutover never leaves the
+# provisioner resolving a tag that does not exist. See compose-ai-tools#4774 item 4.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to build and attach to an existing v<version> Release.'
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+            asset: linux-x86_64
+          - os: macos-14
+            platform: mac
+            asset: macos-arm64
+          - os: windows-2022
+            platform: windows
+            asset: windows-x86_64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Derive the version
+        shell: bash
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          version="${INPUT_VERSION:-${REF_NAME#v}}"
+          if [ -z "$version" ]; then
+            echo "::error::could not determine a version from the tag or input."
+            exit 1
+          fi
+          echo "XR_VERSION=$version" >> "$GITHUB_ENV"
+      - uses: ./.github/actions/build-xr-composite
+        with:
+          platform: ${{ matrix.platform }}
+      - name: Package the versioned tarball
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p staged-artifacts
+          tar -C dist -czf \
+            "staged-artifacts/xr-composite-${{ matrix.asset }}-${XR_VERSION}.tar.gz" .
+          ls -l staged-artifacts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xr-composite-${{ matrix.asset }}
+          path: staged-artifacts/*
+          if-no-files-found: error
+          retention-days: 1
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # create the Release and upload assets
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+      - name: Create or update the Release
+        # `--clobber` so a re-run after a partial upload converges instead of erroring. The tag
+        # name is read from env, never templated into the script, so a crafted ref cannot break
+        # out of the quoting.
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          TAG_NAME: ${{ github.ref_type == 'tag' && github.ref_name || format('v{0}', inputs.version) }}
+        run: |
+          set -euo pipefail
+          ls -l artifacts
+          if gh release view "$TAG_NAME" >/dev/null 2>&1; then
+            gh release upload "$TAG_NAME" --clobber artifacts/xr-composite-*.tar.gz
+          else
+            gh release create "$TAG_NAME" \
+              --title "xr-composite ${TAG_NAME#v}" \
+              --generate-notes \
+              artifacts/xr-composite-*.tar.gz
+          fi
+          echo "published xr-composite assets onto $TAG_NAME"

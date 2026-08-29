@@ -1,0 +1,118 @@
+name: contract drift
+
+# The compositor parses two wire contracts it does not own:
+#
+#   * SpatialScene      — the scene.json it renders
+#   * XR render service — the JSON-RPC surface it speaks in `--serve`
+#
+# Both are defined by schemas in yschimke/compose-ai-tools, which generates this repository's
+# `src/spatial_scene.hpp`, `src/xr_render_service.hpp` and `test/xr_render_service.py` from them.
+# Those files are GENERATED and committed here, which is the whole hazard of the split: while both
+# sides lived in one tree, one `--check` job proved the mirrors matched the schema atomically. They
+# no longer do.
+#
+# So this job reconstructs that check across the boundary. It checks out upstream at the SHA in
+# `upstream-pin.txt`, runs upstream's own generators there, and diffs the result against the copies
+# committed here. Using upstream's generator rather than a vendored fork is deliberate — a forked
+# generator is a third thing that can drift, and the point is to have exactly one.
+#
+# A failure means one of:
+#   * the contract moved upstream and this repository has not regenerated  -> bump the pin, copy
+#     the regenerated files in, and re-run the smoke;
+#   * someone hand-edited a generated file here                            -> revert it.
+#
+# Bumping `upstream-pin.txt` is a deliberate, reviewable commit rather than a floating fetch, so a
+# contract change upstream never silently redefines what this binary parses.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # Weekly, because the interesting failure is upstream moving while nothing changes here — which
+  # by definition no push to this repository would catch.
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    name: Generated mirrors match the pinned upstream schemas
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Read the upstream pin
+        id: pin
+        run: |
+          set -euo pipefail
+          ref="$(tr -d '[:space:]' < upstream-pin.txt)"
+          if [ -z "$ref" ]; then
+            echo "::error::upstream-pin.txt is empty; it must name a compose-ai-tools commit."
+            exit 1
+          fi
+          echo "ref=$ref" >> "$GITHUB_OUTPUT"
+          echo "pinned to compose-ai-tools@$ref"
+
+      - uses: actions/checkout@v4
+        with:
+          repository: yschimke/compose-ai-tools
+          ref: ${{ steps.pin.outputs.ref }}
+          path: upstream
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Regenerate with upstream's own generators
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          node scripts/codegen/gen-spatial-scene.mjs
+          node scripts/codegen/gen-xr-render-service.mjs
+
+      - name: Diff every generated mirror against the regenerated copy
+        run: |
+          set -euo pipefail
+          status=0
+          # Left: what upstream's generator produced from the pinned schemas.
+          # Right: what this repository has committed and actually compiles.
+          check() {
+            if ! diff -u "upstream/$1" "$2"; then
+              echo "::error::$2 does not match upstream@$(cat upstream-pin.txt) — see the diff above."
+              status=1
+            else
+              echo "ok: $2"
+            fi
+          }
+          check renderers/xr-composite/src/spatial_scene.hpp     src/spatial_scene.hpp
+          check renderers/xr-composite/src/xr_render_service.hpp src/xr_render_service.hpp
+          check renderers/xr-composite/test/xr_render_service.py test/xr_render_service.py
+          exit $status
+
+      - name: Diff the vendored schemas and scene fixture
+        # The schemas are vendored for readability, the fixture is what the serve smoke renders.
+        # Neither is compiled, so nothing else would notice them going stale.
+        run: |
+          set -euo pipefail
+          status=0
+          for f in schema/spatial-scene.schema.json schema/xr-render-service.schema.json; do
+            if ! diff -u "upstream/$f" "$f"; then
+              echo "::error::$f is stale against upstream@$(cat upstream-pin.txt)."
+              status=1
+            else
+              echo "ok: $f"
+            fi
+          done
+          if ! diff -ru upstream/schema/fixtures/spatial-scene schema/fixtures/spatial-scene; then
+            echo "::error::the vendored scene fixture is stale against the pinned upstream."
+            status=1
+          else
+            echo "ok: schema/fixtures/spatial-scene"
+          fi
+          exit $status

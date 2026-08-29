@@ -1,0 +1,78 @@
+name: build
+
+# Build the compositor on every desktop platform, and prove the one that is actually
+# runtime-exercised still renders. Mirrors what `xr-composite-build.yml` did inside
+# compose-ai-tools, minus the path scoping — in this repository every change is a compositor
+# change.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: build (${{ matrix.asset }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+            asset: linux-x86_64
+          - os: macos-14
+            platform: mac
+            asset: macos-arm64
+          - os: windows-2022
+            platform: windows
+            asset: windows-x86_64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/build-xr-composite
+        with:
+          platform: ${{ matrix.platform }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xr-composite-${{ matrix.asset }}
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 7
+
+  smoke:
+    # Only Linux is runtime-exercised — the mac/win binaries are built and published but their
+    # GL path has never been proven end to end. That was true before the split and is recorded
+    # honestly in the README rather than papered over with a green check.
+    name: serve smoke (linux, llvmpipe)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/build-xr-composite
+        with:
+          platform: linux
+      - name: Install a virtual display and software GL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends xvfb libgl1-mesa-dri libglx-mesa0
+      - name: Drive the JSON-RPC server end to end
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          GALLIUM_DRIVER: llvmpipe
+        run: |
+          xvfb-run -a -s "-screen 0 2000x1400x24" \
+            python3 test/serve_smoke.py \
+              "$PWD/dist/xr-composite" "$PWD/dist/materials" \
+              "$PWD/schema/fixtures/spatial-scene"

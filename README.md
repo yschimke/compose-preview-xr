@@ -1,8 +1,13 @@
 # xr-composite
 
+The native compositor behind [compose-preview](https://github.com/yschimke/compose-ai-tools)'s XR
+renders. Split out of that repository so it ships on its own cadence rather than being rebuilt and
+republished on every release — see [AGENTS.md](AGENTS.md) for how it is versioned and released, and
+why the generated headers here must never be hand-edited.
+
 A small native (C++) tool that renders a **SpatialScene** — the `scene.json` +
 per-panel `<id>.png` textures emitted by `:renderer-xr` (see
-[`docs/design/SPATIAL_SCENE_CONTRACT.md`](../../docs/design/SPATIAL_SCENE_CONTRACT.md)) —
+[`docs/design/SPATIAL_SCENE_CONTRACT.md`](https://github.com/yschimke/compose-ai-tools/blob/main/docs/design/SPATIAL_SCENE_CONTRACT.md)) —
 into a composite PNG: a baked still of the 3D spatial layout, the same scene the
 VS Code WebGL viewer shows interactively.
 
@@ -11,12 +16,12 @@ It runs two ways: **one-shot** (`--scene` → one PNG → exit) and a long-lived
 across frames, and streams rendered frames back as panels are updated per-frame —
 the first increment of the daemon-fronted native XR render server (the daemon spawns and
 multiplexes this process). The protocol is defined by
-[`schema/xr-render-service.schema.json`](../../schema/xr-render-service.schema.json), which
+[`schema/xr-render-service.schema.json`](schema/xr-render-service.schema.json), which
 generates the method/parameter/error vocabulary used by this tool
 ([`src/xr_render_service.hpp`](src/xr_render_service.hpp)), its JVM client (`:renderer-xr-client`)
 and the [serve smoke harness](test/serve_smoke.py) — so the three cannot drift.
 The `SpatialScene` types it parses are generated from
-[`schema/spatial-scene.schema.json`](../../schema/spatial-scene.schema.json) (see
+[`schema/spatial-scene.schema.json`](schema/spatial-scene.schema.json) (see
 [`spatial_scene.hpp`](src/spatial_scene.hpp)).
 
 It exists because the still has to be produced **headless, with no GPU**, on
@@ -174,10 +179,10 @@ band on the horizon. The horizon colour also doubles as the readback **clear col
 Consumers do **not** build this tool or run an install step. The binary + compiled `materials/` are
 published per OS as `xr-composite-<platform>-<version>.tar.gz` (`linux-x86_64` / `macos-arm64` /
 `windows-x86_64`) by
-[`.github/workflows/xr-composite-release.yml`](../../.github/workflows/xr-composite-release.yml) —
+[`.github/workflows/xr-composite-release.yml`](.github/workflows/release.yml) —
 **not** on every release. `<version>` is the `xr-composite` pin in
-[`gradle/libs.versions.toml`](../../gradle/libs.versions.toml), which moves only when this directory
-does; see [docs/RELEASING.md](../../docs/RELEASING.md) for how to cut one. When the
+[`gradle/libs.versions.toml`](https://github.com/yschimke/compose-ai-tools/blob/main/gradle/libs.versions.toml), which moves only when this directory
+does; see [docs/RELEASING.md](AGENTS.md#releasing) for how to cut one. When the
 `compose-preview` CLI drives a render and discovers an `XR_SUBSPACE` preview, it **auto-fetches** the
 tarball matching that pin into a shared, well-known cache:
 
