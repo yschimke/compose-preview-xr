@@ -2,5 +2,26 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "local>yschimke/renovate-config"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "The Filament desktop SDK tag the compositor builds against. No built-in manager sees it: it is a plain string in a composite action's input default and in build.sh, not a dependency in any manifest — so without this it would never be offered an update at all, and this repository exists to build against exactly that SDK. Keyed off a `# renovate:` marker comment rather than the surrounding syntax, so the two sites can be written naturally and a third can opt in with one line.",
+      "managerFilePatterns": [
+        "/^\\.github/actions/build-xr-composite/action\\.yml$/",
+        "/^build\\.sh$/"
+      ],
+      "matchStrings": [
+        "#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)\\s*\\n[^\\n]*?(?<currentValue>v\\d+\\.\\d+\\.\\d+)"
+      ],
+      "versioningTemplate": "semver"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Never automerge Filament, overriding the shared preset's minor/patch automerge. This component's failure mode is a subtly wrong or empty image, not a crash: the serve smoke proves the renderer still produces a DIFFERENT image when a panel moves, which a graphics SDK bump can pass while quietly changing what everything looks like. A human compares the render.",
+      "matchPackageNames": ["google/filament"],
+      "automerge": false
+    }
   ]
 }
