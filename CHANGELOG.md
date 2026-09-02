@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/yschimke/compose-preview-xr/compare/v1.0.1...v2.0.0) (2026-09-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* **xr:** move renderer into XR repository ([#11](https://github.com/yschimke/compose-preview-xr/issues/11))
+
+### Features
+
+* **xr:** move renderer into XR repository ([#11](https://github.com/yschimke/compose-preview-xr/issues/11)) ([bb6614b](https://github.com/yschimke/compose-preview-xr/commit/bb6614bf3e707cac129f84d3080448ef00302796))
+
 ## [1.0.1](https://github.com/yschimke/compose-preview-xr/compare/v1.0.0...v1.0.1) (2026-08-29)
 
 
