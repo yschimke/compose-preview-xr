@@ -1,6 +1,6 @@
 name: release
 
-# Publish the per-OS compositor tarballs for a tag.
+# Publish the per-OS compositor tarballs and renderer-xr AAR for a tag.
 #
 # This is the release train the split exists to create. In compose-ai-tools the compositor was
 # rebuilt and republished on EVERY release — 226 of them, 1.23 GB, for 13 changes to the C++ —
@@ -30,6 +30,12 @@ on:
         description: 'Tag whose Release the assets attach to, e.g. v1.2.3.'
         required: true
         type: string
+    secrets:
+      MAVEN_CENTRAL_USERNAME: {required: true}
+      MAVEN_CENTRAL_PASSWORD: {required: true}
+      SIGNING_KEY: {required: true}
+      SIGNING_KEY_ID: {required: true}
+      SIGNING_KEY_PASSWORD: {required: true}
   # For a tag a human pushes by hand, which does trigger workflows.
   push:
     tags: ['v*']
@@ -109,8 +115,42 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  publish:
+  publish-renderer:
     needs: build
+    runs-on: ubuntu-latest
+    env:
+      ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+      ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
+      ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+      ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+      ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+          persist-credentials: false
+      - name: Derive the version
+        shell: bash
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          tag="${INPUT_TAG:-$REF_NAME}"
+          case "$tag" in
+            v?*) echo "XR_VERSION=${tag#v}" >> "$GITHUB_ENV" ;;
+            *) echo "::error::expected a tag like v1.2.3, got '$tag'."; exit 1 ;;
+          esac
+      - uses: actions/setup-java@v5.0.0
+        with:
+          distribution: zulu
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v5.0.0
+      - name: Publish renderer-xr to Maven Central
+        run: ./gradlew --no-daemon :renderer-xr:publishAndReleaseToMavenCentral --stacktrace
+
+  publish:
+    needs: [build, publish-renderer]
     runs-on: ubuntu-latest
     permissions:
       contents: write   # create the Release and upload assets

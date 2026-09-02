@@ -1,0 +1,49 @@
+[versions]
+agp = "9.3.2"
+kotlin = "2.4.10"
+ktfmt = "0.27.0"
+maven-publish = "0.37.0"
+compose-preview = "1.62.1"
+composeai-contracts = "2.3.0"
+compose-bom = "2026.08.00"
+activity-compose = "1.13.0"
+xr-compose = "1.0.0-alpha17"
+xr-runtime-testing = "1.0.0-beta02"
+xr-scenecore-testing = "1.0.0-beta02"
+xr-arcore-testing = "1.0.0-beta02"
+robolectric = "4.17-beta-4"
+roborazzi = "1.73.0"
+junit = "4.13.2"
+truth = "1.4.5"
+
+[libraries]
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+compose-foundation = { module = "androidx.compose.foundation:foundation" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
+xr-compose = { module = "androidx.xr.compose:compose", version.ref = "xr-compose" }
+xr-compose-testing = { module = "androidx.xr.compose:compose-testing", version.ref = "xr-compose" }
+xr-runtime-testing = { module = "androidx.xr.runtime:runtime-testing", version.ref = "xr-runtime-testing" }
+xr-scenecore-testing = { module = "androidx.xr.scenecore:scenecore-testing", version.ref = "xr-scenecore-testing" }
+xr-arcore-testing = { module = "androidx.xr.arcore:arcore-testing", version.ref = "xr-arcore-testing" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "roborazzi" }
+roborazzi-compose = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "roborazzi" }
+junit = { module = "junit:junit", version.ref = "junit" }
+truth = { module = "com.google.truth:truth", version.ref = "truth" }
+preview-data-api = { module = "ee.schimke.composeai:preview-data-api", version.ref = "compose-preview" }
+preview-annotations = { module = "ee.schimke.composeai:preview-annotations", version.ref = "compose-preview" }
+data-layoutinspector-connector = { module = "ee.schimke.composeai:data-layoutinspector-connector", version.ref = "compose-preview" }
+data-render-core = { module = "ee.schimke.composeai:data-render-core", version.ref = "composeai-contracts" }
+
+[plugins]
+android-library = { id = "com.android.library", version.ref = "agp" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ktfmt = { id = "com.ncorti.ktfmt.gradle", version.ref = "ktfmt" }
+maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
+compose-preview = { id = "ee.schimke.composeai.preview", version.ref = "compose-preview" }

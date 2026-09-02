@@ -19,6 +19,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  renderer:
+    name: renderer-xr (Android/Robolectric)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v5.0.0
+        with:
+          distribution: zulu
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v5.0.0
+      - name: Check formatting and run the renderer/sample tests
+        run: ./gradlew --no-daemon ktfmtCheck check --stacktrace
+
   build:
     name: build (${{ matrix.asset }})
     strategy:

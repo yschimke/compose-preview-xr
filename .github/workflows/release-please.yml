@@ -1,8 +1,8 @@
 name: release-please
 
 # Keeps a "chore(main): release X.Y.Z" pull request up to date from conventional-commit history.
-# Merging it creates the tag and the GitHub Release, and then — in this same run — builds the three
-# platform tarballs and attaches them.
+# Merging it creates the tag and GitHub Release, publishes renderer-xr to Maven Central, and then
+# builds the three platform tarballs and attaches them.
 #
 # Chaining `release.yml` here rather than letting it trigger on the tag push is not a style choice:
 # a tag created with GITHUB_TOKEN does not trigger `on: push: tags`, so a tag-triggered build would
@@ -50,6 +50,12 @@ jobs:
     uses: ./.github/workflows/release.yml
     permissions:
       contents: write
+    secrets:
+      MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+      MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+      SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+      SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+      SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
     with:
       tag: ${{ needs.release-please.outputs.tag_name }}
 

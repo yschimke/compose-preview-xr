@@ -4,18 +4,17 @@ Instructions for any coding agent working in this repository.
 
 ## What this is
 
-`xr-composite` — a small native (C++/CMake) tool that renders a **SpatialScene** into a composite
-PNG, headless and GPU-free, using [Filament](https://github.com/google/filament)'s OpenGL backend on
-Mesa llvmpipe under Xvfb. It runs one-shot (`--scene` → PNG) or as a long-lived JSON-RPC server
-(`--serve`) that the compose-preview daemon fronts.
+The XR rendering stack behind compose-preview: the Android/Robolectric `renderer-xr` module that
+records Compose XR subspaces as **SpatialScene** files, plus the native `xr-composite` tool that
+bakes those scenes into PNGs with Filament.
 
 It was split out of [`yschimke/compose-ai-tools`](https://github.com/yschimke/compose-ai-tools),
 where it was rebuilt and republished on every release — 226 releases, 1.23 GB, for 13 changes to the
 C++ — because both consumers addressed the binary by *their* version. It now ships on its own
 cadence against a version pin upstream.
 
-**Everything here is the compositor.** There is no other component, so unlike upstream there is no
-path scoping: every change builds all three platforms and runs the smoke.
+The renderer consumes released wire DTO and data-product artifacts from compose-ai-tools. This is
+the cross-repository boundary: do not copy those contracts here or recreate their generators.
 
 ## The invariants
 
@@ -76,6 +75,16 @@ and bumping that version there — not editing this repository.
 
 ## Building and testing
 
+The Android renderer and its XR sample use the Gradle wrapper:
+
+```sh
+./gradlew ktfmtCheck check
+```
+
+Kotlin changes must be formatted with `./gradlew ktfmtFormat` before committing.
+
+The compositor build remains:
+
 ```sh
 ./build.sh                                  # downloads the pinned Filament SDK, then CMake+Ninja
 FILAMENT_SDK=/path/to/filament ./build.sh   # or reuse an unpacked SDK / CI cache
@@ -102,15 +111,16 @@ otherwise.
 
 ## Releasing
 
-Driven by release-please, so **commit subjects decide the version**. Conventional commits are not
+Driven by release-please, so **commit subjects decide the shared version**. Conventional commits are not
 cosmetic here: `fix:` cuts a patch, `feat:` a minor, `feat!:` or a `BREAKING CHANGE:` footer a
 major. A commit whose subject release-please cannot parse contributes nothing to the changelog and
 may leave the release PR proposing no bump at all.
 
 1. Merge the `chore(main): release X.Y.Z` pull request release-please keeps open. That creates the
-   tag and the Release, then — in the same run — builds all three platforms, attaches the tarballs,
-   and verifies all three are present.
-2. Point the `xr-composite` pin in upstream's `gradle/libs.versions.toml` at `X.Y.Z`.
+   tag and Release, publishes `ee.schimke.composeai:renderer-xr:X.Y.Z` to Maven Central, builds all
+   three native platforms, and attaches the tarballs.
+2. Point the `xr-renderer` pin in compose-ai-tools' `gradle/libs.versions.toml` at `X.Y.Z`. Move the
+   independent `xr-composite` pin too when the native binary should advance.
 
 Both halves, always. Consumers resolve the binary **by that pin**, so a release nobody pins reaches
 nobody, and a pin naming a release that does not exist degrades silently into "no composite" —

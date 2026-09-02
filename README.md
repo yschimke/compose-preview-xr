@@ -1,9 +1,33 @@
-# xr-composite
+# compose-preview-xr
 
-The native compositor behind [compose-preview](https://github.com/yschimke/compose-ai-tools)'s XR
-renders. Split out of that repository so it ships on its own cadence rather than being rebuilt and
-republished on every release — see [AGENTS.md](AGENTS.md) for how it is versioned and released, and
-why the generated headers here must never be hand-edited.
+The XR rendering stack behind [compose-preview](https://github.com/yschimke/compose-ai-tools): an
+Android/Robolectric renderer that records Compose XR subspaces, and the native compositor that
+bakes the recorded scene into a PNG. They release together here, independently of the main render
+path.
+
+## Compose XR renderer
+
+`renderers/xr/` publishes `ee.schimke.composeai:renderer-xr`. It composes an `@XrSubspacePreview`
+under the Jetpack XR fake runtime, writes `scene.json` plus per-panel textures, and projects panel
+semantics into the spatial tree. `samples/xr-spatial/` is its in-repository fixture.
+
+The renderer deliberately consumes compose-preview's released `preview-data-api`,
+`data-render-core`, and layout-inspector connector artifacts. Those repositories therefore share
+a published boundary rather than duplicate the generated SpatialScene DTO.
+
+```sh
+./gradlew ktfmtCheck check
+```
+
+To exercise the renderer task against an unmerged compose-ai-tools plugin checkout, substitute its
+included build explicitly:
+
+```sh
+./gradlew -PcomposeAiToolsCheckout=/path/to/compose-ai-tools \
+  :samples:xr-spatial:composePreviewRenderXr
+```
+
+## Native compositor
 
 A small native (C++) tool that renders a **SpatialScene** — the `scene.json` +
 per-panel `<id>.png` textures emitted by `:renderer-xr` (see
