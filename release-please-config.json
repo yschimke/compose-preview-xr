@@ -4,7 +4,7 @@
   "include-v-in-tag": true,
   "packages": {
     ".": {
-      "package-name": "xr-composite",
+      "package-name": "compose-preview-xr",
       "include-component-in-tag": false
     }
   }
