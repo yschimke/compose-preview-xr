@@ -10,6 +10,11 @@ ktfmt { googleStyle() }
 configurations.configureEach {
   resolutionStrategy.dependencySubstitution {
     substitute(module("ee.schimke.composeai:renderer-xr")).using(project(":renderer-xr"))
+    // A source-substituted plugin has a SNAPSHOT PluginVersion, but this repository does not own
+    // renderer-android. Keep that sibling on the released compose-preview line during cross-repo
+    // development.
+    substitute(module("ee.schimke.composeai:renderer-android"))
+      .using(module("ee.schimke.composeai:renderer-android:${libs.versions.compose.preview.get()}"))
   }
 }
 

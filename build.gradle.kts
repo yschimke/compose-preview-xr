@@ -3,7 +3,6 @@ plugins {
   alias(libs.plugins.compose.compiler) apply false
   alias(libs.plugins.ktfmt) apply false
   alias(libs.plugins.maven.publish) apply false
-  alias(libs.plugins.compose.preview) apply false
 }
 
 tasks.register("check") {
@@ -20,4 +19,3 @@ tasks.register("ktfmtFormat") {
   group = "formatting"
   dependsOn(":renderer-xr:ktfmtFormat", ":samples:xr-spatial:ktfmtFormat")
 }
-

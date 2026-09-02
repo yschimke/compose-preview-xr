@@ -1,4 +1,7 @@
 pluginManagement {
+  providers.gradleProperty("composeAiToolsCheckout").orNull?.let {
+    includeBuild(file(it).resolve("gradle-plugin"))
+  }
   repositories {
     gradlePluginPortal()
     google()

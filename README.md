@@ -19,6 +19,14 @@ a published boundary rather than duplicate the generated SpatialScene DTO.
 ./gradlew ktfmtCheck check
 ```
 
+To exercise the renderer task against an unmerged compose-ai-tools plugin checkout, substitute its
+included build explicitly:
+
+```sh
+./gradlew -PcomposeAiToolsCheckout=/path/to/compose-ai-tools \
+  :samples:xr-spatial:composePreviewRenderXr
+```
+
 ## Native compositor
 
 A small native (C++) tool that renders a **SpatialScene** — the `scene.json` +
