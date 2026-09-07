@@ -26,11 +26,11 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-java@v5.0.0
+      - uses: actions/setup-java@v5.7.0
         with:
           distribution: zulu
           java-version: '17'
-      - uses: gradle/actions/setup-gradle@v5.0.0
+      - uses: gradle/actions/setup-gradle@v5.0.2
       - name: Check formatting and run the renderer/sample tests
         run: ./gradlew --no-daemon ktfmtCheck check --stacktrace
 
