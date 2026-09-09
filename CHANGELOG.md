@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.1](https://github.com/yschimke/compose-preview-xr/compare/v2.0.0...v2.0.1) (2026-09-09)
+
+
+### Bug Fixes
+
+* **deps:** update compose-ai-tools to v1.85.0 ([#16](https://github.com/yschimke/compose-preview-xr/issues/16)) ([a2b486c](https://github.com/yschimke/compose-preview-xr/commit/a2b486c7c013dd3fc0c835aeb44186ea97acc227))
+* **deps:** update dependency ee.schimke.composeai:data-render-core to v2.11.0 ([#17](https://github.com/yschimke/compose-preview-xr/issues/17)) ([d718780](https://github.com/yschimke/compose-preview-xr/commit/d71878075b3bcd196ae03381d1de695661480e0e))
+
 ## [2.0.0](https://github.com/yschimke/compose-preview-xr/compare/v1.0.1...v2.0.0) (2026-09-02)
 
 
