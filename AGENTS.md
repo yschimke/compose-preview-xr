@@ -13,8 +13,12 @@ where it was rebuilt and republished on every release — 226 releases, 1.23 GB,
 C++ — because both consumers addressed the binary by *their* version. It now ships on its own
 cadence against a version pin upstream.
 
-The renderer consumes released wire DTO and data-product artifacts from compose-ai-tools. This is
-the cross-repository boundary: do not copy those contracts here or recreate their generators.
+The renderer consumes released wire DTO and data-product artifacts from
+[`yschimke/compose-preview-daemon`](https://github.com/yschimke/compose-preview-daemon) (the
+`preview-data-api`, `preview-annotations` and layout-inspector connector line, split out of
+compose-ai-tools in compose-ai-tools#5336) and the `data-render-core` contract from
+compose-preview-contracts. This is the cross-repository boundary: do not copy those contracts here
+or recreate their generators.
 
 ## The invariants
 
@@ -38,7 +42,8 @@ Never `claude/…`, `codex/…`, `copilot/…`. If a session hands you one, rena
 ### Never hand-edit a generated file
 
 `src/spatial_scene.hpp`, `src/xr_render_service.hpp` and `test/xr_render_service.py` are
-**generated** from schemas in compose-ai-tools. They carry a `GENERATED FILE — DO NOT EDIT` banner.
+**generated** from schemas in compose-preview-daemon. They carry a `GENERATED FILE — DO NOT EDIT`
+banner.
 
 This is the load-bearing constraint of the split. While both sides lived in one tree, a single
 `--check` job proved the mirrors matched their schemas atomically. They no longer do, so
@@ -51,7 +56,7 @@ the three mirrors from an upstream checkout, refresh the vendored `schema/` file
 serve smoke — all in one reviewable commit.
 
 ```sh
-up=/path/to/compose-ai-tools   # checked out at the SHA you are pinning
+up=/path/to/compose-preview-daemon   # checked out at the SHA you are pinning
 node $up/scripts/codegen/gen-spatial-scene.mjs     --emit-cpp    > src/spatial_scene.hpp
 node $up/scripts/codegen/gen-xr-render-service.mjs --emit-cpp    > src/xr_render_service.hpp
 node $up/scripts/codegen/gen-xr-render-service.mjs --emit-python > test/xr_render_service.py

@@ -5,11 +5,12 @@ name: contract drift
 #   * SpatialScene      — the scene.json it renders
 #   * XR render service — the JSON-RPC surface it speaks in `--serve`
 #
-# Both are defined by schemas in yschimke/compose-ai-tools, which generates this repository's
-# `src/spatial_scene.hpp`, `src/xr_render_service.hpp` and `test/xr_render_service.py` from them.
-# Those files are GENERATED and committed here, which is the whole hazard of the split: while both
-# sides lived in one tree, one `--check` job proved the mirrors matched the schema atomically. They
-# no longer do.
+# Both are defined by schemas in yschimke/compose-preview-daemon (they moved there from
+# compose-ai-tools with the daemon in compose-ai-tools#5336; that repository's copies are no longer
+# checked by anything), whose generators produce this repository's `src/spatial_scene.hpp`,
+# `src/xr_render_service.hpp` and `test/xr_render_service.py`. Those files are GENERATED and
+# committed here, which is the whole hazard of the split: while both sides lived in one tree, one
+# `--check` job proved the mirrors matched the schema atomically. They no longer do.
 #
 # So this job reconstructs that check across the boundary. It checks out upstream at the SHA in
 # `upstream-pin.txt`, runs upstream's own generators there, and diffs the result against the copies
@@ -59,15 +60,15 @@ jobs:
           set -euo pipefail
           ref="$(tr -d '[:space:]' < upstream-pin.txt)"
           if [ -z "$ref" ]; then
-            echo "::error::upstream-pin.txt is empty; it must name a compose-ai-tools commit."
+            echo "::error::upstream-pin.txt is empty; it must name a compose-preview-daemon commit."
             exit 1
           fi
           echo "ref=$ref" >> "$GITHUB_OUTPUT"
-          echo "pinned to compose-ai-tools@$ref"
+          echo "pinned to compose-preview-daemon@$ref"
 
       - uses: actions/checkout@v7.0.1
         with:
-          repository: yschimke/compose-ai-tools
+          repository: yschimke/compose-preview-daemon
           ref: ${{ steps.pin.outputs.ref }}
           path: upstream
           persist-credentials: false
