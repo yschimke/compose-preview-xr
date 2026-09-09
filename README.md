@@ -11,9 +11,11 @@ path.
 under the Jetpack XR fake runtime, writes `scene.json` plus per-panel textures, and projects panel
 semantics into the spatial tree. `samples/xr-spatial/` is its in-repository fixture.
 
-The renderer deliberately consumes compose-preview's released `preview-data-api`,
-`data-render-core`, and layout-inspector connector artifacts. Those repositories therefore share
-a published boundary rather than duplicate the generated SpatialScene DTO.
+The renderer deliberately consumes released artifacts rather than sources: `preview-data-api` and
+the layout-inspector connector from
+[compose-preview-daemon](https://github.com/yschimke/compose-preview-daemon), and
+`data-render-core` from compose-preview-contracts. Those repositories therefore share a published
+boundary rather than duplicate the generated SpatialScene DTO.
 
 ```sh
 ./gradlew ktfmtCheck check
@@ -31,7 +33,8 @@ included build explicitly:
 
 A small native (C++) tool that renders a **SpatialScene** — the `scene.json` +
 per-panel `<id>.png` textures emitted by `:renderer-xr` (see
-[`docs/design/SPATIAL_SCENE_CONTRACT.md`](https://github.com/yschimke/compose-ai-tools/blob/main/docs/design/SPATIAL_SCENE_CONTRACT.md)) —
+[`docs/design/SPATIAL_SCENE_CONTRACT.md`](https://github.com/yschimke/compose-ai-tools/blob/main/docs/design/SPATIAL_SCENE_CONTRACT.md);
+the schema itself is owned by [compose-preview-daemon](https://github.com/yschimke/compose-preview-daemon)) —
 into a composite PNG: a baked still of the 3D spatial layout, the same scene the
 VS Code WebGL viewer shows interactively.
 
