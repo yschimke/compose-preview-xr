@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.1](https://github.com/yschimke/compose-preview-xr/compare/v2.0.0...v2.0.1) (2026-09-21)
+
+
+### Bug Fixes
+
+* **deps:** update compose-ai-tools to v1.85.0 ([#16](https://github.com/yschimke/compose-preview-xr/issues/16)) ([a2b486c](https://github.com/yschimke/compose-preview-xr/commit/a2b486c7c013dd3fc0c835aeb44186ea97acc227))
+* **deps:** update dependency androidx.compose:compose-bom to v2026.09.00 ([#26](https://github.com/yschimke/compose-preview-xr/issues/26)) ([4fa4604](https://github.com/yschimke/compose-preview-xr/commit/4fa4604181bd745f0fe5713ce0ebf3bbda783959))
+* **deps:** update dependency ee.schimke.composeai:data-render-core to v2.11.0 ([#17](https://github.com/yschimke/compose-preview-xr/issues/17)) ([d718780](https://github.com/yschimke/compose-preview-xr/commit/d71878075b3bcd196ae03381d1de695661480e0e))
+* **deps:** update dependency ee.schimke.composeai:data-render-core to v2.20.0 ([#27](https://github.com/yschimke/compose-preview-xr/issues/27)) ([d29f20e](https://github.com/yschimke/compose-preview-xr/commit/d29f20e812dbc978d0d48e67a675354cda37436d))
+* **deps:** update dependency org.robolectric:robolectric to v4.17 ([#23](https://github.com/yschimke/compose-preview-xr/issues/23)) ([e98a129](https://github.com/yschimke/compose-preview-xr/commit/e98a129804b12c18c74a51f8050280dadbd2cd06))
+
 ## [2.0.0](https://github.com/yschimke/compose-preview-xr/compare/v1.0.1...v2.0.0) (2026-09-02)
 
 
