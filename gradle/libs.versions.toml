@@ -4,6 +4,11 @@ kotlin = "2.4.20"
 ktfmt = "0.27.0"
 maven-publish = "0.37.0"
 compose-preview = "2.18.1"
+# The library coordinates (preview-data-api, preview-annotations, the layout-inspector connector,
+# renderer-android) are published by yschimke/compose-preview-daemon on its own 3.x line, not at the
+# plugin's version. Keep this at the daemon line the `compose-preview` plugin above was released
+# against (compose-ai-tools' `composeai-preview-daemon` pin at that tag).
+composeai-preview-daemon = "3.8.0"
 composeai-contracts = "2.20.0"
 compose-bom = "2026.09.00"
 activity-compose = "1.13.0"
@@ -36,9 +41,9 @@ roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = 
 roborazzi-compose = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "roborazzi" }
 junit = { module = "junit:junit", version.ref = "junit" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
-preview-data-api = { module = "ee.schimke.composeai:preview-data-api", version.ref = "compose-preview" }
-preview-annotations = { module = "ee.schimke.composeai:preview-annotations", version.ref = "compose-preview" }
-data-layoutinspector-connector = { module = "ee.schimke.composeai:data-layoutinspector-connector", version.ref = "compose-preview" }
+preview-data-api = { module = "ee.schimke.composeai:preview-data-api", version.ref = "composeai-preview-daemon" }
+preview-annotations = { module = "ee.schimke.composeai:preview-annotations", version.ref = "composeai-preview-daemon" }
+data-layoutinspector-connector = { module = "ee.schimke.composeai:data-layoutinspector-connector", version.ref = "composeai-preview-daemon" }
 data-render-core = { module = "ee.schimke.composeai:data-render-core", version.ref = "composeai-contracts" }
 
 [plugins]
