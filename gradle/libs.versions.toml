@@ -13,9 +13,13 @@ composeai-contracts = "2.20.0"
 compose-bom = "2026.09.00"
 activity-compose = "1.13.0"
 xr-compose = "1.0.0-beta01"
-xr-runtime-testing = "1.0.0-rc01"
-xr-scenecore-testing = "1.0.0-rc01"
-xr-arcore-testing = "1.0.0-rc01"
+# Held at beta02: the 1.0.0-rc01 runtime set ("improved internal lifecycle events handling") defers
+# Session resume/pause through a configuration mutex, and under Robolectric the fake runtimes are then
+# never laid out (panel sizes read 0) and are destroyed while still RESUMED. Moving to rc01 needs the
+# offline session wiring ported; the three move together because Gradle resolves them as one set.
+xr-runtime-testing = "1.0.0-beta02"
+xr-scenecore-testing = "1.0.0-beta02"
+xr-arcore-testing = "1.0.0-beta02"
 robolectric = "4.17"
 roborazzi = "1.75.0"
 junit = "4.13.2"
