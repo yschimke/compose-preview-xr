@@ -8,7 +8,7 @@ compose-preview = "2.34.0"
 # renderer-android) are published by yschimke/compose-preview-daemon on its own 3.x line, not at the
 # plugin's version. Keep this at the daemon line the `compose-preview` plugin above was released
 # against (compose-ai-tools' `composeai-preview-daemon` pin at that tag).
-composeai-preview-daemon = "3.8.0"
+composeai-preview-daemon = "3.12.0"
 composeai-contracts = "2.20.0"
 compose-bom = "2026.09.00"
 activity-compose = "1.13.0"
