@@ -3,7 +3,7 @@ agp = "9.4.1"
 kotlin = "2.4.20"
 ktfmt = "0.27.0"
 maven-publish = "0.37.0"
-compose-preview = "2.18.1"
+compose-preview = "2.34.0"
 # The library coordinates (preview-data-api, preview-annotations, the layout-inspector connector,
 # renderer-android) are published by yschimke/compose-preview-daemon on its own 3.x line, not at the
 # plugin's version. Keep this at the daemon line the `compose-preview` plugin above was released
