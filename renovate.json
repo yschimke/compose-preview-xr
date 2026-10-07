@@ -3,6 +3,7 @@
   "extends": [
     "local>yschimke/renovate-config"
   ],
+  "platformAutomerge": true,
   "customManagers": [
     {
       "customType": "regex",
