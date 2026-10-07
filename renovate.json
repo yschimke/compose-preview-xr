@@ -20,6 +20,11 @@
   ],
   "packageRules": [
     {
+      "description": "The daemon modules must equal the daemon the compose-preview plugin bakes in: renderer-xr is loaded by that daemon. Renovate cannot read that value, so it never moves them on its own; bump composeai-preview-daemon in the plugin's PR (gradle/libs.versions.toml).",
+      "matchPackageNames": ["ee.schimke.composeai:preview-data-api", "ee.schimke.composeai:preview-annotations", "ee.schimke.composeai:data-layoutinspector-connector"],
+      "enabled": false
+    },
+    {
       "description": "Never automerge Filament, overriding the shared preset's minor/patch automerge. This component's failure mode is a subtly wrong or empty image, not a crash: the serve smoke proves the renderer still produces a DIFFERENT image when a panel moves, which a graphics SDK bump can pass while quietly changing what everything looks like. A human compares the render.",
       "matchPackageNames": ["google/filament"],
       "automerge": false
