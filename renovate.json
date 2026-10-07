@@ -20,7 +20,7 @@
   ],
   "packageRules": [
     {
-      "description": "The daemon modules must equal the daemon the compose-preview plugin bakes in: renderer-xr is loaded by that daemon. Renovate cannot read that value, so it never moves them on its own; bump composeai-preview-daemon in the plugin's PR (gradle/libs.versions.toml).",
+      "description": "The daemon modules should equal the daemon the compose-preview plugin bakes in, because renderer-xr is loaded by that daemon, and are currently held at 3.12.0 (see gradle/libs.versions.toml). Renovate cannot read the baked value, so it never moves them on its own; move composeai-preview-daemon by hand.",
       "matchPackageNames": ["ee.schimke.composeai:preview-data-api", "ee.schimke.composeai:preview-annotations", "ee.schimke.composeai:data-layoutinspector-connector"],
       "enabled": false
     },
