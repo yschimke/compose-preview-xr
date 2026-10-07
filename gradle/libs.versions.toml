@@ -3,13 +3,22 @@ agp = "9.4.1"
 kotlin = "2.4.20"
 ktfmt = "0.27.0"
 maven-publish = "0.37.0"
-compose-preview = "2.34.0"
+compose-preview = "2.35.0"
 # The library coordinates (preview-data-api, preview-annotations, the layout-inspector connector,
 # renderer-android) are published by yschimke/compose-preview-daemon on its own 3.x line, not at the
-# plugin's version. Keep this at the daemon line the `compose-preview` plugin above was released
-# against (compose-ai-tools' `composeai-preview-daemon` pin at that tag).
+# plugin's version. It should equal the daemon the `compose-preview` plugin above bakes in
+# (2.35.0 bakes 3.13.2), because renderer-xr is loaded by that daemon. It is HELD at 3.12.0: with
+# renderer-android 3.13.2 the xr-spatial pose tests fail (`Check failed` in
+# FakePerceptionRuntime.destroy, and the recovered panel poses are wrong), while 3.12.0 passes with
+# plugin 2.35.0. Move it once renderer-xr works against 3.13.x. Renovate does not move it on its
+# own (renovate.json).
+#
+# Deliberately NOT through compose-preview-daemon-bom, unlike the catalogs. A platform here is
+# carried into the renderer classpath the plugin assembles, and its compose-preview-contracts-bom
+# import moves modules renderer-android was built against: the xr-spatial pose tests fail with
+# "Check failed" in FakePerceptionRuntime.destroy even with the BOM at the same daemon version.
 composeai-preview-daemon = "3.12.0"
-composeai-contracts = "2.20.0"
+composeai-contracts = "3.15.0"
 compose-bom = "2026.09.00"
 activity-compose = "1.13.0"
 xr-compose = "1.0.0-beta01"
