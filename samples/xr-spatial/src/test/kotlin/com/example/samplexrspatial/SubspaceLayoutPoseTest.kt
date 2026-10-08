@@ -1,11 +1,9 @@
 package com.example.samplexrspatial
 
-import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.unit.dp
-import androidx.test.core.app.ApplicationProvider
 import androidx.xr.compose.platform.LocalSpatialCapabilities
 import androidx.xr.compose.spatial.Subspace
 import androidx.xr.compose.subspace.SpatialColumn
@@ -20,7 +18,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 
 /**
@@ -40,7 +37,8 @@ import org.robolectric.annotation.Config
  * 2. `Subspace` only takes its spatial path when
  *    `packageManager.hasSystemFeature("android.software.xr.api.spatial")` is true. Robolectric
  *    reports `false`, so we shadow it on with [ShadowPackageManager.setSystemFeature]. The session
- *    and `LocalComposeXrOwners` then auto-wire from the activity.
+ *    is pre-created and handed to `Subspace` by [OfflineXrSession.install] (see its KDoc for why a
+ *    lazily created one no longer lays out).
  * 3. The panel transforms are read from the public spatial-semantics tree
  *    (`onSubspaceNodeWithTag(tag).fetchSemanticsNode().poseInRoot` / `.size`).
  *
@@ -57,9 +55,8 @@ class SubspaceLayoutPoseTest {
 
   @Test
   fun recoversSubspacePanelPosesOffline() {
-    // Gate that selects `Subspace`'s spatial path over its 2D fallback.
-    val pm = ApplicationProvider.getApplicationContext<Context>().packageManager
-    shadowOf(pm).setSystemFeature("android.software.xr.api.spatial", true)
+    // Gate that selects `Subspace`'s spatial path over its 2D fallback, plus a pre-created session.
+    OfflineXrSession.install(rule)
 
     var spatialUiEnabled = false
     rule.setContent {

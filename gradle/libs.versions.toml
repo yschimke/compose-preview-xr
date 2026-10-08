@@ -3,29 +3,30 @@ agp = "9.4.1"
 kotlin = "2.4.20"
 ktfmt = "0.27.0"
 maven-publish = "0.37.0"
-compose-preview = "2.35.0"
+compose-preview = "2.35.1"
 # The library coordinates (preview-data-api, preview-annotations, the layout-inspector connector,
 # renderer-android) are published by yschimke/compose-preview-daemon on its own 3.x line, not at the
 # plugin's version. It should equal the daemon the `compose-preview` plugin above bakes in
-# (2.35.0 bakes 3.13.2), because renderer-xr is loaded by that daemon. It is HELD at 3.12.0: with
-# renderer-android 3.13.2 the xr-spatial pose tests fail (`Check failed` in
-# FakePerceptionRuntime.destroy, and the recovered panel poses are wrong), while 3.12.0 passes with
-# plugin 2.35.0. Move it once renderer-xr works against 3.13.x. Renovate does not move it on its
-# own (renovate.json).
+# (2.35.1 bakes 3.14.1), because renderer-xr is loaded by that daemon. Renovate does not move it on
+# its own (renovate.json); bump it with the plugin.
 #
 # Deliberately NOT through compose-preview-daemon-bom, unlike the catalogs. A platform here is
 # carried into the renderer classpath the plugin assembles, and its compose-preview-contracts-bom
 # import moves modules renderer-android was built against: the xr-spatial pose tests fail with
 # "Check failed" in FakePerceptionRuntime.destroy even with the BOM at the same daemon version.
-composeai-preview-daemon = "3.12.0"
+composeai-preview-daemon = "3.14.1"
+# preview-data-api and preview-annotations are not republished on every daemon release; 3.14.1's BOM
+# still pins them at 3.13.2.
+composeai-preview-api = "3.13.2"
 composeai-contracts = "3.15.0"
 compose-bom = "2026.09.00"
 activity-compose = "1.13.0"
 xr-compose = "1.0.0-beta01"
-# Held at beta02: the 1.0.0-rc01 runtime set ("improved internal lifecycle events handling") defers
-# Session resume/pause through a configuration mutex, and under Robolectric the fake runtimes are then
-# never laid out (panel sizes read 0) and are destroyed while still RESUMED. Moving to rc01 needs the
-# offline session wiring ported; the three move together because Gradle resolves them as one set.
+# The 1.0.0-rc01+ runtime set ("improved internal lifecycle events handling") defers Session
+# resume/pause through a configuration mutex. Under Robolectric that only works with a session that is
+# pre-created before composition and never `configure()`d (see the sample's OfflineXrSession and
+# renderer-xr's FakeXrHeadPose). The three move together because Gradle resolves them as one set;
+# runtime-testing 1.1.0-alpha01 waits for matching scenecore/arcore releases.
 xr-runtime-testing = "1.0.0-rc02"
 xr-scenecore-testing = "1.0.0-rc02"
 xr-arcore-testing = "1.0.0-rc02"
@@ -54,8 +55,8 @@ roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = 
 roborazzi-compose = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "roborazzi" }
 junit = { module = "junit:junit", version.ref = "junit" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
-preview-data-api = { module = "ee.schimke.composeai:preview-data-api", version.ref = "composeai-preview-daemon" }
-preview-annotations = { module = "ee.schimke.composeai:preview-annotations", version.ref = "composeai-preview-daemon" }
+preview-data-api = { module = "ee.schimke.composeai:preview-data-api", version.ref = "composeai-preview-api" }
+preview-annotations = { module = "ee.schimke.composeai:preview-annotations", version.ref = "composeai-preview-api" }
 data-layoutinspector-connector = { module = "ee.schimke.composeai:data-layoutinspector-connector", version.ref = "composeai-preview-daemon" }
 data-render-core = { module = "ee.schimke.composeai:data-render-core", version.ref = "composeai-contracts" }
 

@@ -1,10 +1,8 @@
 package com.example.samplexrspatial
 
-import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.unit.dp
-import androidx.test.core.app.ApplicationProvider
 import androidx.xr.compose.spatial.Subspace
 import androidx.xr.compose.subspace.SpatialBox
 import androidx.xr.compose.subspace.SpatialPanel
@@ -23,7 +21,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 
 /**
@@ -46,11 +43,6 @@ class SubspaceModifierPoseTest {
 
   @Suppress("DEPRECATION") @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
-  private fun enableSpatial() {
-    val pm = ApplicationProvider.getApplicationContext<Context>().packageManager
-    shadowOf(pm).setSystemFeature("android.software.xr.api.spatial", true)
-  }
-
   /** A unit quaternion's rotation angle in degrees: `2·acos(|w|)`. */
   private fun angleDeg(x: Float, y: Float, z: Float, w: Float): Double {
     val vlen = sqrt((x * x + y * y + z * z).toDouble())
@@ -59,7 +51,7 @@ class SubspaceModifierPoseTest {
 
   @Test
   fun rotateModifierRecoveredAsQuaternion() {
-    enableSpatial()
+    OfflineXrSession.install(rule)
     rule.setContent {
       Subspace {
         SpatialBox {
@@ -86,7 +78,7 @@ class SubspaceModifierPoseTest {
 
   @Test
   fun rotateOverloadsAgree() {
-    enableSpatial()
+    OfflineXrSession.install(rule)
     rule.setContent {
       Subspace {
         SpatialBox {
