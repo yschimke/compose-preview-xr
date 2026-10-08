@@ -5,12 +5,9 @@
 
 package com.example.samplexrspatial
 
-import android.content.Context
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.unit.dp
-import androidx.test.core.app.ApplicationProvider
 import androidx.xr.compose.spatial.Subspace
 import androidx.xr.compose.subspace.SpatialBox
 import androidx.xr.compose.subspace.SpatialPanel
@@ -22,10 +19,6 @@ import androidx.xr.compose.subspace.layout.rotateToLookAtUser
 import androidx.xr.compose.subspace.layout.width
 import androidx.xr.compose.subspace.semantics.testTag
 import androidx.xr.compose.testing.onSubspaceNodeWithTag
-import androidx.xr.runtime.Config as XrConfig
-import androidx.xr.runtime.DeviceTrackingMode
-import androidx.xr.runtime.Session
-import androidx.xr.runtime.SessionCreateSuccess
 import androidx.xr.runtime.math.Pose
 import androidx.xr.runtime.math.Vector3
 import com.google.common.truth.Truth.assertThat
@@ -35,7 +28,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
@@ -47,16 +39,15 @@ import org.robolectric.annotation.LooperMode
  * `rotateToLookAtUser` is driven by `RotateToLookAtUserNode`, which reads the user's head pose from
  * an ARCore `ArDevice` perception job. Out of the box offline the default `Session` is created with
  * device tracking `DISABLED`, so the node never initialises `arDevice` and crashes in its head-pose
- * job (`UninitializedPropertyAccessException`). [seedHeadPose] registers the fake perception
- * runtime (via `ServiceLoader`, see `src/test/resources/META-INF/services`), enables device
- * tracking, and exercises a **custom viewer head pose in front of the panels (+Z)** — so a centred
- * panel ends up facing the viewer (≈ identity) and side panels turn inward toward them. The render
- * path's camera-derived default pose is covered in `:renderer-xr`'s `XrSubspaceRendererTest`.
+ * job (`UninitializedPropertyAccessException`). [OfflineXrSession.installWithHeadPose] uses the
+ * fake perception runtime (registered via `ServiceLoader`, see `src/test/resources/META-INF/
+ * services`), enables device tracking, and exercises a **custom viewer head pose in front of the
+ * panels (+Z)** — so a centred panel ends up facing the viewer (≈ identity) and side panels turn
+ * inward toward them. The render path's camera-derived default pose is covered in `:renderer-xr`'s
+ * `XrSubspaceRendererTest`.
  *
- * Its own class (own Robolectric sandbox + PAUSED looper): the seeding calls `Session.configure` /
- * `ArDevice.update`, each an internal `runBlocking` that deadlocks under Robolectric's default
- * kotlinx-coroutines-test main dispatcher (PAUSED is the mode `:renderer-xr`'s render task runs
- * in), and isolating it keeps the live perception runtime it spins up from leaking into the plainer
+ * Its own class (own Robolectric sandbox + PAUSED looper, the mode `:renderer-xr`'s render task
+ * runs in), which keeps the perception runtime it seeds from leaking into the plainer
  * `SubspaceModifierPoseTest` cases.
  */
 @RunWith(RobolectricTestRunner::class)
@@ -66,62 +57,16 @@ class RotateToLookAtUserPoseTest {
 
   @Suppress("DEPRECATION") @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
-  private fun enableSpatial() {
-    val pm = ApplicationProvider.getApplicationContext<Context>().packageManager
-    shadowOf(pm).setSystemFeature("android.software.xr.api.spatial", true)
-  }
-
   /** A unit quaternion's rotation angle in degrees: `2·acos(|w|)`. */
   private fun angleDeg(x: Float, y: Float, z: Float, w: Float): Double {
     val vlen = sqrt((x * x + y * y + z * z).toDouble())
     return Math.toDegrees(2.0 * Math.atan2(vlen, abs(w).toDouble()))
   }
 
-  /**
-   * Makes `rotateToLookAtUser` viable offline: pre-creates a `Session` with **device tracking
-   * enabled** and seeds the fake `ArDevice` with a custom **viewer head pose** in front of the
-   * panels (+Z). It uses the same reflective fake-state seam as `:renderer-xr`'s `FakeXrHeadPose`,
-   * inlined so the sample test stays free of a renderer dependency. The arcore types are reached
-   * reflectively so the sample only needs the `arcore-testing` artifact on its classpath.
-   *
-   * Call **before** `setContent`, after the spatial feature is enabled.
-   */
-  private fun seedHeadPose(
-    rule: AndroidComposeTestRule<*, ComponentActivity>,
-    headPose: Pose = Pose(translation = Vector3(0f, 0f, 2f)),
-  ) {
-    val created = Session.create(rule.activity)
-    check(created is SessionCreateSuccess) { "Could not create offline XR Session: $created" }
-    val session = created.session
-    session.configure(XrConfig(deviceTracking = DeviceTrackingMode.SPATIAL_LAST_KNOWN))
-    // Subspace's getOrCreateSession reuses this session via the decor-view tag (alpha15 dropped the
-    // `AndroidComposeTestRule.session` extension, so write the tag directly).
-    rule.activity.window.decorView.setTag(androidx.xr.compose.R.id.compose_xr_session, session)
-
-    val arDeviceClass = Class.forName("androidx.xr.arcore.ArDevice")
-    val arDevice = arDeviceClass.getMethod("getInstance", Session::class.java).invoke(null, session)
-    val runtimeArDevice = arDeviceClass.getMethod("getRuntimeArDevice\$arcore").invoke(arDevice)
-    runtimeArDevice.javaClass
-      .getMethod("setDevicePose", Pose::class.java)
-      .invoke(runtimeArDevice, headPose)
-    val trackingStateClass = Class.forName("androidx.xr.arcore.runtime.TrackingState")
-    runtimeArDevice.javaClass
-      .getMethod("setTrackingState", trackingStateClass)
-      .invoke(runtimeArDevice, trackingStateClass.getField("TRACKING").get(null))
-    // Pump one update() (suspend) so the seeded pose lands in the StateFlow the node collects.
-    kotlinx.coroutines.runBlocking {
-      val update = arDeviceClass.getMethod("update", kotlin.coroutines.Continuation::class.java)
-      kotlin.coroutines.intrinsics.suspendCoroutineUninterceptedOrReturn<Unit> { cont ->
-        update.invoke(arDevice, cont)
-      }
-    }
-  }
-
   @Test
   fun rotateToLookAtUserFacesViewerOffline() {
-    enableSpatial()
     // Enable device tracking + seed a head pose in front of the panels so "look at user" resolves.
-    seedHeadPose(rule)
+    OfflineXrSession.installWithHeadPose(rule, Pose(translation = Vector3(0f, 0f, 2f)))
     rule.setContent {
       Subspace {
         SpatialBox {
