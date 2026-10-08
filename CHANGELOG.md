@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.2](https://github.com/yschimke/compose-preview-xr/compare/v2.0.1...v2.0.2) (2026-10-08)
+
+
+### Bug Fixes
+
+* **deps:** plugin 2.35.0 and contracts 3.15.0; hold the daemon at 3.12.0 ([#41](https://github.com/yschimke/compose-preview-xr/issues/41)) ([86f0e7e](https://github.com/yschimke/compose-preview-xr/commit/86f0e7e721d2aabbd66f49c1e8e91a2c25d14f24))
+* **deps:** plugin 2.35.1 and daemon 3.14.1; fix the xr-spatial pose tests on XR rc02 ([#42](https://github.com/yschimke/compose-preview-xr/issues/42)) ([799ca84](https://github.com/yschimke/compose-preview-xr/commit/799ca840c10caef8106ebc5949de030bbc8c21d7))
+* **deps:** update androidx to v1.0.0-rc02 ([#33](https://github.com/yschimke/compose-preview-xr/issues/33)) ([fc6be41](https://github.com/yschimke/compose-preview-xr/commit/fc6be41ec2cb175126f96052019572f66484f084))
+* **deps:** update compose-preview-daemon ([#35](https://github.com/yschimke/compose-preview-xr/issues/35)) ([bd95676](https://github.com/yschimke/compose-preview-xr/commit/bd9567661b1ff6fc2ab50e22a1b01e65318b11bb))
+* **deps:** update roborazzi to v1.76.0 ([#36](https://github.com/yschimke/compose-preview-xr/issues/36)) ([bfb5c31](https://github.com/yschimke/compose-preview-xr/commit/bfb5c31fef3b5bf18be67c520cfed11c2453c069))
+
 ## [2.0.1](https://github.com/yschimke/compose-preview-xr/compare/v2.0.0...v2.0.1) (2026-10-02)
 
 
