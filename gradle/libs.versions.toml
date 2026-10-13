@@ -14,7 +14,7 @@ compose-preview = "2.55.0"
 # carried into the renderer classpath the plugin assembles, and its compose-preview-contracts-bom
 # import moves modules renderer-android was built against: the xr-spatial pose tests fail with
 # "Check failed" in FakePerceptionRuntime.destroy even with the BOM at the same daemon version.
-composeai-preview-daemon = "3.14.1"
+composeai-preview-daemon = "3.16.1"
 # preview-data-api and preview-annotations are not republished on every daemon release; 3.14.1's BOM
 # still pins them at 3.13.2.
 composeai-preview-api = "3.13.2"
