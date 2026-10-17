@@ -28,7 +28,7 @@ runs:
       run: |
         sudo apt-get update
         sudo apt-get install -y --no-install-recommends \
-          clang libc++-dev libc++abi-dev ninja-build
+          clang libc++-dev libc++abi-dev libx11-dev ninja-build
 
     - name: Install Ninja (macOS)
       if: runner.os == 'macOS'

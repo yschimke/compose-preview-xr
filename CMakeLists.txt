@@ -90,6 +90,11 @@ find_library(FILAMENT_WEBGPU_DAWN NAMES webgpu_dawn
   PATHS "${FILAMENT_LIB_DIR}" NO_DEFAULT_PATH)
 if(FILAMENT_WEBGPU_DAWN)
   target_link_libraries(xr-composite PRIVATE "${FILAMENT_WEBGPU_DAWN}")
+  if(UNIX AND NOT APPLE)
+    # The SDK's WebGPUPlatformLinux uses XGetWindowAttributes.
+    find_package(X11 REQUIRED)
+    target_link_libraries(xr-composite PRIVATE X11::X11)
+  endif()
 endif()
 if(APPLE)
   # QuartzCore provides CAMetalLayer (referenced by Filament's Metal backend);
