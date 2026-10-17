@@ -84,6 +84,13 @@ target_link_directories(xr-composite PRIVATE "${FILAMENT_LIB_DIR}")
 # CMake resolves these names to lib<name>.a on Unix and <name>.lib on Windows.
 target_link_libraries(xr-composite PRIVATE
   filament backend bluegl bluevk filabridge filaflat utils geometry smol-v ibl abseil zstd)
+# Filament 1.78 enables WebGPU in the desktop SDK. Its backend archive references
+# Dawn even when this compositor selects OpenGL. Older SDKs omit the archive.
+find_library(FILAMENT_WEBGPU_DAWN NAMES webgpu_dawn
+  PATHS "${FILAMENT_LIB_DIR}" NO_DEFAULT_PATH)
+if(FILAMENT_WEBGPU_DAWN)
+  target_link_libraries(xr-composite PRIVATE "${FILAMENT_WEBGPU_DAWN}")
+endif()
 if(APPLE)
   # QuartzCore provides CAMetalLayer (referenced by Filament's Metal backend);
   # Foundation backs the Objective-C runtime the .mm objects pull in.
