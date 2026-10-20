@@ -18,7 +18,7 @@ composeai-preview-daemon = "3.18.9"
 # preview-data-api and preview-annotations are not republished on every daemon release; 3.14.1's BOM
 # still pins them at 3.13.2.
 composeai-preview-api = "3.13.2"
-composeai-contracts = "3.32.0"
+composeai-contracts = "3.37.0"
 compose-bom = "2026.09.00"
 activity-compose = "1.13.0"
 xr-compose = "1.0.0-beta01"
