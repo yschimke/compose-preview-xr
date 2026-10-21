@@ -21,15 +21,15 @@ composeai-preview-api = "3.13.2"
 composeai-contracts = "3.37.0"
 compose-bom = "2026.09.00"
 activity-compose = "1.13.0"
-xr-compose = "1.0.0-beta01"
+xr-compose = "1.0.0-beta02"
 # The 1.0.0-rc01+ runtime set ("improved internal lifecycle events handling") defers Session
 # resume/pause through a configuration mutex. Under Robolectric that only works with a session that is
 # pre-created before composition and never `configure()`d (see the sample's OfflineXrSession and
 # renderer-xr's FakeXrHeadPose). The three move together because Gradle resolves them as one set;
 # runtime-testing 1.1.0-alpha01 waits for matching scenecore/arcore releases.
-xr-runtime-testing = "1.0.0-rc02"
-xr-scenecore-testing = "1.0.0-rc02"
-xr-arcore-testing = "1.0.0-rc02"
+xr-runtime-testing = "1.0.0"
+xr-scenecore-testing = "1.0.0"
+xr-arcore-testing = "1.0.0"
 robolectric = "4.17"
 roborazzi = "1.76.0"
 junit = "4.13.2"
