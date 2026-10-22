@@ -14,7 +14,7 @@ inputs:
     description: Filament release tag to build against.
     required: false
     # renovate: datasource=github-releases depName=google/filament
-    default: v1.77.2
+    default: v1.78.0
 
 runs:
   using: composite
@@ -28,7 +28,7 @@ runs:
       run: |
         sudo apt-get update
         sudo apt-get install -y --no-install-recommends \
-          clang libc++-dev libc++abi-dev ninja-build
+          clang libc++-dev libc++abi-dev libx11-dev ninja-build
 
     - name: Install Ninja (macOS)
       if: runner.os == 'macOS'
