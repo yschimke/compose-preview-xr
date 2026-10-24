@@ -1,5 +1,28 @@
 # Changelog
 
+## [2.0.3](https://github.com/yschimke/compose-preview-xr/compare/v2.0.2...v2.0.3) (2026-10-24)
+
+
+### Bug Fixes
+
+* **deps:** update androidx ([#80](https://github.com/yschimke/compose-preview-xr/issues/80)) ([e1f8341](https://github.com/yschimke/compose-preview-xr/commit/e1f8341a0ae3a37b37dae98406d58b867ac81cb2))
+* **deps:** update dependency ee.schimke.composeai:data-render-core to v3.28.0 ([#47](https://github.com/yschimke/compose-preview-xr/issues/47)) ([f207592](https://github.com/yschimke/compose-preview-xr/commit/f207592ef05692515102b8b2cdb8d4f251abcbbc))
+* **deps:** update dependency ee.schimke.composeai:data-render-core to v3.31.0 ([#52](https://github.com/yschimke/compose-preview-xr/issues/52)) ([2f88637](https://github.com/yschimke/compose-preview-xr/commit/2f8863777c188e0b660175d983305a90c0c51dcb))
+* **deps:** update dependency ee.schimke.composeai:data-render-core to v3.32.0 ([#57](https://github.com/yschimke/compose-preview-xr/issues/57)) ([f002915](https://github.com/yschimke/compose-preview-xr/commit/f002915cd7305a96be62208c7e31ad03f0900ee4))
+* **deps:** update dependency ee.schimke.composeai:data-render-core to v3.37.0 ([#74](https://github.com/yschimke/compose-preview-xr/issues/74)) ([65103e8](https://github.com/yschimke/compose-preview-xr/commit/65103e8b435fc95016f46b3b43aaf5d88c43a741))
+* **deps:** update dependency ee.schimke.composeai:data-render-core to v3.38.0 ([#83](https://github.com/yschimke/compose-preview-xr/issues/83)) ([dab058d](https://github.com/yschimke/compose-preview-xr/commit/dab058d1f27f79fd2be6ba51296c79bd0455fcda))
+* **deps:** update dependency ee.schimke.composeai:data-render-core to v3.39.0 ([#86](https://github.com/yschimke/compose-preview-xr/issues/86)) ([34d8301](https://github.com/yschimke/compose-preview-xr/commit/34d83012637dbf4da8bd8b314a7ba59a1fc672ac))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.16.1 ([#53](https://github.com/yschimke/compose-preview-xr/issues/53)) ([83bb2a7](https://github.com/yschimke/compose-preview-xr/commit/83bb2a730187cd0049267b0d6762bcb28f758316))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.18.1 ([#64](https://github.com/yschimke/compose-preview-xr/issues/64)) ([6b51a08](https://github.com/yschimke/compose-preview-xr/commit/6b51a08d7f7dd4593fef18b811091b5e480c5676))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.18.6 ([#67](https://github.com/yschimke/compose-preview-xr/issues/67)) ([a635221](https://github.com/yschimke/compose-preview-xr/commit/a635221cbfd23420d5f576d69ed1a62a1bc9f598))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.18.7 ([#69](https://github.com/yschimke/compose-preview-xr/issues/69)) ([cc43d11](https://github.com/yschimke/compose-preview-xr/commit/cc43d11730b82efef39ab785b989ad7537a8dced))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.21.3 ([#77](https://github.com/yschimke/compose-preview-xr/issues/77)) ([4545ad8](https://github.com/yschimke/compose-preview-xr/commit/4545ad853193d6ff10c090ed3464f03d1daadd37))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.21.4 ([#81](https://github.com/yschimke/compose-preview-xr/issues/81)) ([0a7f2e0](https://github.com/yschimke/compose-preview-xr/commit/0a7f2e0df45bf7ad2b3200967b8b87d9fa3b1f42))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.22.0 ([#84](https://github.com/yschimke/compose-preview-xr/issues/84)) ([0e30a19](https://github.com/yschimke/compose-preview-xr/commit/0e30a19b2701098b9b1b6939abb44f95e7300b6d))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.24.0 ([#87](https://github.com/yschimke/compose-preview-xr/issues/87)) ([9cfed55](https://github.com/yschimke/compose-preview-xr/commit/9cfed55b17d38ad6d6cd81ec467dc0848c5a1538))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.24.1 ([#90](https://github.com/yschimke/compose-preview-xr/issues/90)) ([33f9c24](https://github.com/yschimke/compose-preview-xr/commit/33f9c247fb51db82ccf24a42ab20579c636d8d92))
+* **deps:** update roborazzi to v1.77.0 ([#82](https://github.com/yschimke/compose-preview-xr/issues/82)) ([7ab37ff](https://github.com/yschimke/compose-preview-xr/commit/7ab37ffb889db45a807d71d823166a69ad4828d0))
+
 ## [2.0.2](https://github.com/yschimke/compose-preview-xr/compare/v2.0.1...v2.0.2) (2026-10-08)
 
 
