@@ -30,7 +30,7 @@ jobs:
         with:
           distribution: zulu
           java-version: '17'
-      - uses: gradle/actions/setup-gradle@v6.4.0
+      - uses: gradle/actions/setup-gradle@v6.4.1
       - name: Check formatting and run the renderer/sample tests
         run: ./gradlew --no-daemon ktfmtCheck check --stacktrace
 
