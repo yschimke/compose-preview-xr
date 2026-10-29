@@ -247,7 +247,11 @@ These tripped up the initial implementation and are load-bearing:
 - **Floating-panel fidelity:** to match Android XR's floating glass panels, each
   panel quad rounds its corners and adds a faint edge rim in `unlit_texture.mat`
   (a rounded-rect SDF drives the alpha mask + rim), and a separate soft
-  rounded-rect **shadow quad** (`panel_shadow.mat`) is composited behind/below it.
+  **shadow quad** (`panel_shadow.mat`) is composited behind/below it. The shadow
+  takes the panel's own silhouette (texture alpha inside the rounded rect, blurred
+  from the texture's mips) inside the old rounded-rect falloff, so an opaque panel
+  casts the same rounded-rect shadow and a transparent document, such as a 3D
+  shape drawn with no background, casts the shadow of what it draws.
   Corner radius / rim / shadow are computed in an **aspect-corrected rect space**
   (half-extents `(aspect,1)` or `(1,1/aspect)`) so corners stay circular on wide
   panels. Real Filament shadow maps are unstable/expensive on llvmpipe, so the
