@@ -615,6 +615,7 @@ void Compositor::rebuildPanels() {
       float shh = outerHalf.y * dpPerUnitX;
 
       MaterialInstance* smi = shadowMat_->createInstance();
+      smi->setParameter("content", tex, sampler);
       smi->setParameter("halfSize", halfSize);
       smi->setParameter("cornerRadius", kCornerRadius);
       smi->setParameter("blur", blurUnits);
