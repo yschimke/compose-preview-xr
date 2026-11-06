@@ -67,7 +67,7 @@ fun SampleLookAtUserPreview() {
             .width(300.dp)
             .height(200.dp)
             .offset(x = x.dp)
-            .rotateToLookAtUser()
+            .rotateToLookAtUser(),
         ) {
           Box(Modifier.fillMaxSize().background(Color.Red))
         }

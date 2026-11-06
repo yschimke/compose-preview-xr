@@ -104,12 +104,15 @@ fun SpatialDepthPreview() {
         SubspaceModifier.testTag("depth-background")
           .width(640.dp)
           .height(420.dp)
-          .offset(z = (-120).dp)
+          .offset(z = (-120).dp),
       ) {
         LibraryGrid()
       }
       SpatialPanel(
-        SubspaceModifier.testTag("depth-foreground").width(420.dp).height(180.dp).offset(z = 120.dp)
+        SubspaceModifier.testTag("depth-foreground")
+          .width(420.dp)
+          .height(180.dp)
+          .offset(z = 120.dp),
       ) {
         AlbumArtCard()
       }

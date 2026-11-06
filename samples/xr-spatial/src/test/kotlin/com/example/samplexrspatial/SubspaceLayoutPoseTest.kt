@@ -98,10 +98,10 @@ class SubspaceLayoutPoseTest {
           val p = n.second.poseInRoot.translation
           val s = n.second.size
           appendLine(
-            "  ${n.first}: poseInRoot=(${p.x}, ${p.y}, ${p.z}) size=(${s.width} x ${s.height})"
+            "  ${n.first}: poseInRoot=(${p.x}, ${p.y}, ${p.z}) size=(${s.width} x ${s.height})",
           )
         }
-      }
+      },
     )
   }
 }

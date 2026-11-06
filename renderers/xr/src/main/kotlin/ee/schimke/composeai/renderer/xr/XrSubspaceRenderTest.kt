@@ -40,7 +40,7 @@ public class XrSubspaceRenderTest(private val preview: XrManifestReader.XrPrevie
       File(
         requireNotNull(System.getProperty(OUTPUT_DIR_PROP)) {
           "$OUTPUT_DIR_PROP system property not set"
-        }
+        },
       )
     val outputDir = File(rendersDir, sanitize(preview.id)).apply { mkdirs() }
     XrSubspaceRenderer.render(

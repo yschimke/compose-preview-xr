@@ -84,7 +84,7 @@ public object XrSubspaceRenderer {
       .onFailure {
         System.err.println(
           "XrSubspaceRenderer: spatial-semantics write failed for $previewId: " +
-            "${it.javaClass.simpleName}: ${it.message}"
+            "${it.javaClass.simpleName}: ${it.message}",
         )
       }
 

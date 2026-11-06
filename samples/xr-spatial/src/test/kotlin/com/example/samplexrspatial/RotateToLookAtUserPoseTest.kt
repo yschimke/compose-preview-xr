@@ -76,7 +76,7 @@ class RotateToLookAtUserPoseTest {
             SubspaceModifier.testTag("look-center")
               .width(300.dp)
               .height(200.dp)
-              .rotateToLookAtUser()
+              .rotateToLookAtUser(),
           ) {
             ReferencePanel("center")
           }
@@ -86,7 +86,7 @@ class RotateToLookAtUserPoseTest {
               .width(300.dp)
               .height(200.dp)
               .offset(x = (-500).dp)
-              .rotateToLookAtUser()
+              .rotateToLookAtUser(),
           ) {
             ReferencePanel("left")
           }

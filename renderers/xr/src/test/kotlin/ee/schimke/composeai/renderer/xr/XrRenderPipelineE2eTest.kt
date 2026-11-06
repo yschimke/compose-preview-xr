@@ -83,7 +83,7 @@ class XrRenderPipelineE2eTest {
             ]
           }
           """
-            .trimIndent()
+            .trimIndent(),
         )
       }
 
