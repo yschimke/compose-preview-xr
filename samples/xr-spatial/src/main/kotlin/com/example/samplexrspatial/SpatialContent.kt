@@ -120,7 +120,7 @@ fun LibraryGrid(modifier: Modifier = Modifier) {
               Modifier.fillMaxWidth()
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(12.dp))
-                .background(Brush.linearGradient(listOf(color, color.copy(alpha = 0.55f))))
+                .background(Brush.linearGradient(listOf(color, color.copy(alpha = 0.55f)))),
             )
             Text(
               title,
@@ -165,7 +165,7 @@ fun QueueList(modifier: Modifier = Modifier) {
             Box(
               Modifier.size(36.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colorScheme.primaryContainer)
+                .background(MaterialTheme.colorScheme.primaryContainer),
             )
             Column(Modifier.weight(1f)) {
               Text(
@@ -204,8 +204,8 @@ fun AlbumArtCard(modifier: Modifier = Modifier) {
           .aspectRatio(1f)
           .clip(RoundedCornerShape(16.dp))
           .background(
-            Brush.linearGradient(listOf(Color(0xFF6750A4), Color(0xFF1E88E5), Color(0xFF00897B)))
-          )
+            Brush.linearGradient(listOf(Color(0xFF6750A4), Color(0xFF1E88E5), Color(0xFF00897B))),
+          ),
       )
       Text("Aurora", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
       Text(
@@ -229,7 +229,7 @@ fun SearchBar(modifier: Modifier = Modifier) {
       Box(
         Modifier.size(20.dp)
           .clip(RoundedCornerShape(50))
-          .background(MaterialTheme.colorScheme.primary)
+          .background(MaterialTheme.colorScheme.primary),
       )
       Text(
         "Search your library",

@@ -69,7 +69,7 @@ public object FakeXrHeadPose {
           (eyeX / pixelsPerMeter).toFloat(),
           (eyeY / pixelsPerMeter).toFloat(),
           (eyeZ / pixelsPerMeter).toFloat(),
-        )
+        ),
     )
   }
 
@@ -170,7 +170,7 @@ public object FakeXrHeadPose {
     System.err.println(
       "FakeXrHeadPose: could not $step (${t.javaClass.simpleName}: ${t.message}); " +
         "rotateToLookAtUser billboards fall back to a default facing. This is usually an " +
-        "androidx.xr.* version skew — update the reflective accessors in FakeXrHeadPose."
+        "androidx.xr.* version skew — update the reflective accessors in FakeXrHeadPose.",
     )
   }
 

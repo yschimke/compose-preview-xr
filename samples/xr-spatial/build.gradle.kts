@@ -16,8 +16,8 @@ configurations.configureEach {
     substitute(module("ee.schimke.composeai:renderer-android"))
       .using(
         module(
-          "ee.schimke.composeai:renderer-android:${libs.versions.composeai.preview.daemon.get()}"
-        )
+          "ee.schimke.composeai:renderer-android:${libs.versions.composeai.preview.daemon.get()}",
+        ),
       )
   }
 }

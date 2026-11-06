@@ -32,7 +32,7 @@ class XrManifestReaderTest {
           ]
         }
         """
-          .trimIndent()
+          .trimIndent(),
       )
 
     val xr = XrManifestReader.xrPreviews(file)

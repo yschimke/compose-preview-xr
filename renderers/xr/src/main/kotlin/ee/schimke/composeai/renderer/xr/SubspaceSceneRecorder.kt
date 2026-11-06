@@ -140,7 +140,7 @@ public object SubspaceSceneRecorder {
         "compose-ai-tools xr: recovered no content View for any of ${panels.size} tagged panel(s). " +
           "SubspaceSceneRecorder reaches a panel's view reflectively via one of " +
           "$RT_ENTITY_ACCESSORS then getView(); if androidx.xr.scenecore renamed either, panel " +
-          "textures and 2D semantics will be missing from this scene."
+          "textures and 2D semantics will be missing from this scene.",
       )
     }
     val scene = SpatialScene(previewId = previewId, camera = defaultCamera(panels), panels = panels)
@@ -259,7 +259,7 @@ public object SubspaceSceneRecorder {
 
   @Suppress("UNCHECKED_CAST")
   private fun allSemanticsNodes(
-    rule: AndroidComposeTestRule<*, ComponentActivity>
+    rule: AndroidComposeTestRule<*, ComponentActivity>,
   ): List<SubspaceSemanticsInfo> {
     // alpha15 made SubspaceTestContext's constructor `internal` (it's still JVM-public); build it
     // reflectively, matching how the enumeration below reaches

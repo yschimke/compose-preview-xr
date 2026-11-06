@@ -56,7 +56,7 @@ class SubspaceModifierPoseTest {
       Subspace {
         SpatialBox {
           SpatialPanel(
-            SubspaceModifier.testTag("yaw30").width(300.dp).height(200.dp).rotate(0f, 30f, 0f)
+            SubspaceModifier.testTag("yaw30").width(300.dp).height(200.dp).rotate(0f, 30f, 0f),
           ) {
             ReferencePanel("Yaw 30")
           }
@@ -67,7 +67,7 @@ class SubspaceModifierPoseTest {
 
     val r = rule.onSubspaceNodeWithTag("yaw30").fetchSemanticsNode("no 'yaw30'").poseInRoot.rotation
     println(
-      "rotate(0,30,0) -> quat=(${r.x}, ${r.y}, ${r.z}, ${r.w}) angle=${angleDeg(r.x, r.y, r.z, r.w)}°"
+      "rotate(0,30,0) -> quat=(${r.x}, ${r.y}, ${r.z}, ${r.w}) angle=${angleDeg(r.x, r.y, r.z, r.w)}°",
     )
 
     // A ~30° turn is recovered (not identity), about the vertical (Y) axis.
@@ -83,12 +83,12 @@ class SubspaceModifierPoseTest {
       Subspace {
         SpatialBox {
           SpatialPanel(
-            SubspaceModifier.testTag("euler").width(300.dp).height(200.dp).rotate(0f, 30f, 0f)
+            SubspaceModifier.testTag("euler").width(300.dp).height(200.dp).rotate(0f, 30f, 0f),
           ) {
             ReferencePanel("e")
           }
           SpatialPanel(
-            SubspaceModifier.testTag("axis").width(300.dp).height(200.dp).rotate(Vector3.Up, 30f)
+            SubspaceModifier.testTag("axis").width(300.dp).height(200.dp).rotate(Vector3.Up, 30f),
           ) {
             ReferencePanel("a")
           }
@@ -96,7 +96,7 @@ class SubspaceModifierPoseTest {
             SubspaceModifier.testTag("quat")
               .width(300.dp)
               .height(200.dp)
-              .rotate(Quaternion.fromEulerAngles(0f, 30f, 0f))
+              .rotate(Quaternion.fromEulerAngles(0f, 30f, 0f)),
           ) {
             ReferencePanel("q")
           }

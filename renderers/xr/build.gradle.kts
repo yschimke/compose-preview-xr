@@ -95,13 +95,13 @@ mavenPublishing {
       javadocJar = JavadocJar.Empty(),
       sourcesJar = SourcesJar.Sources(),
       variant = "release",
-    )
+    ),
   )
   coordinates(group.toString(), "renderer-xr", version.toString())
   pom {
     name.set("Compose Preview — XR Renderer")
     description.set(
-      "Offline Compose XR producer of SpatialScene layouts and per-panel textures for compose-preview."
+      "Offline Compose XR producer of SpatialScene layouts and per-panel textures for compose-preview.",
     )
     url.set("https://github.com/yschimke/compose-preview-xr")
     inceptionYear.set("2025")
