@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.0.5](https://github.com/yschimke/compose-preview-xr/compare/v2.0.4...v2.0.5) (2026-11-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ee.schimke.composeai:data-render-core to v3.40.0 ([#121](https://github.com/yschimke/compose-preview-xr/issues/121)) ([22acde6](https://github.com/yschimke/compose-preview-xr/commit/22acde6b227c270af70eda4b850b64be854e1d6f))
+* **deps:** update dependency ee.schimke.composeai:data-render-core to v3.43.0 ([#133](https://github.com/yschimke/compose-preview-xr/issues/133)) ([1473b75](https://github.com/yschimke/compose-preview-xr/commit/1473b75e5c6e056509cb2e0622ff1934f9448695))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.27.3 ([#124](https://github.com/yschimke/compose-preview-xr/issues/124)) ([7c448fe](https://github.com/yschimke/compose-preview-xr/commit/7c448feb9ed24ea5a8a06d3c145b5802303baf6f))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.27.4 ([#125](https://github.com/yschimke/compose-preview-xr/issues/125)) ([b8d857a](https://github.com/yschimke/compose-preview-xr/commit/b8d857a9503e2e433547e9cae4fb799d6690b7ed))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.27.7 ([#132](https://github.com/yschimke/compose-preview-xr/issues/132)) ([9b7e165](https://github.com/yschimke/compose-preview-xr/commit/9b7e165b36594b9bc522fb77822a614685664c45))
+* **deps:** update dependency org.robolectric:robolectric to v4.18 ([#135](https://github.com/yschimke/compose-preview-xr/issues/135)) ([97d7b95](https://github.com/yschimke/compose-preview-xr/commit/97d7b95f15d89be505089cd2c79c5cdc959387df))
+* **deps:** update roborazzi to v1.78.0 ([#123](https://github.com/yschimke/compose-preview-xr/issues/123)) ([9fcddbb](https://github.com/yschimke/compose-preview-xr/commit/9fcddbbb749bc775bfe75e5044c832322f299db9))
+* **deps:** update roborazzi to v1.79.0 ([#130](https://github.com/yschimke/compose-preview-xr/issues/130)) ([1946c61](https://github.com/yschimke/compose-preview-xr/commit/1946c619c531aa8a181cec08a19019bcb102973e))
+
 ## [2.0.4](https://github.com/yschimke/compose-preview-xr/compare/v2.0.3...v2.0.4) (2026-11-06)
 
 
