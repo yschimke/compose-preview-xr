@@ -19,7 +19,7 @@ ktfmt { googleStyle() }
 
 android {
   namespace = "ee.schimke.composeai.renderer.xr"
-  compileSdk = 37
+  compileSdk { version = release(37) { minorApiLevel = 1 } }
 
   defaultConfig { minSdk = 24 }
 
