@@ -2,8 +2,8 @@ package com.example.samplexrspatial
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import androidx.xr.compose.spatial.ContentEdge
 import androidx.xr.compose.spatial.Orbiter
+import androidx.xr.compose.spatial.OrbiterPosition
 import androidx.xr.compose.spatial.Subspace
 import androidx.xr.compose.subspace.SpatialBox
 import androidx.xr.compose.subspace.SpatialColumn
@@ -122,8 +122,8 @@ fun SpatialDepthPreview() {
 
 /**
  * `Orbiter`s on two edges of a main `SpatialPanel` — a search/title strip floating at
- * [ContentEdge.Top] and the transport controls at [ContentEdge.Bottom]. Orbiters host 2D control
- * strips anchored to a panel's edges in Full Space.
+ * [OrbiterPosition.TopCenter] and the transport controls at [OrbiterPosition.BottomCenter].
+ * Orbiters host 2D control strips anchored to a panel's edges in Full Space.
  */
 @XrSubspacePreview
 @Composable
@@ -131,8 +131,8 @@ fun OrbiterPanelPreview() {
   Subspace {
     SpatialPanel(SubspaceModifier.testTag("orbiter-main").width(560.dp).height(360.dp)) {
       NowPlayingPanel()
-      Orbiter(position = ContentEdge.Top) { SearchBar() }
-      Orbiter(position = ContentEdge.Bottom) { TransportControls() }
+      Orbiter(position = OrbiterPosition.TopCenter()) { SearchBar() }
+      Orbiter(position = OrbiterPosition.BottomCenter()) { TransportControls() }
     }
   }
 }
