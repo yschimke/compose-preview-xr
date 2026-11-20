@@ -11,7 +11,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
 import androidx.xr.compose.spatial.Orbiter
-import androidx.xr.compose.spatial.OrbiterAnchorPoint
+import androidx.xr.compose.spatial.OrbiterPosition
 import androidx.xr.compose.spatial.Subspace
 import androidx.xr.compose.subspace.SpatialColumn
 import androidx.xr.compose.subspace.SpatialPanel
@@ -57,7 +57,7 @@ class SubspaceWorldIntegrationTest {
         SpatialColumn {
           SpatialPanel(SubspaceModifier.testTag("main").width(720.dp).height(360.dp)) {
             Box(Modifier.fillMaxSize().background(Color(0xFF1E3C78)))
-            Orbiter(OrbiterAnchorPoint.Bottom) {
+            Orbiter(OrbiterPosition.BottomCenter()) {
               Box(Modifier.fillMaxSize().background(Color(0xFF333845)))
             }
           }
