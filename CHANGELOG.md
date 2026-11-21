@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.0.5](https://github.com/yschimke/compose-preview-xr/compare/v2.0.4...v2.0.5) (2026-11-21)
+
+
+### Bug Fixes
+
+* **deps:** update androidx to v1.0.0-rc01 ([#145](https://github.com/yschimke/compose-preview-xr/issues/145)) ([0415b09](https://github.com/yschimke/compose-preview-xr/commit/0415b09f532e80fa92a147dc9dd4f5efc244c999))
+* **deps:** update dependency androidx.compose:compose-bom to v2026.11.01 ([#151](https://github.com/yschimke/compose-preview-xr/issues/151)) ([56ea193](https://github.com/yschimke/compose-preview-xr/commit/56ea1931757de1cb35a31ad6f7b8b9fc7d935638))
+* **deps:** update dependency ee.schimke.composeai:data-render-core to v3.40.0 ([#121](https://github.com/yschimke/compose-preview-xr/issues/121)) ([22acde6](https://github.com/yschimke/compose-preview-xr/commit/22acde6b227c270af70eda4b850b64be854e1d6f))
+* **deps:** update dependency ee.schimke.composeai:data-render-core to v3.43.0 ([#133](https://github.com/yschimke/compose-preview-xr/issues/133)) ([1473b75](https://github.com/yschimke/compose-preview-xr/commit/1473b75e5c6e056509cb2e0622ff1934f9448695))
+* **deps:** update dependency ee.schimke.composeai:data-render-core to v3.44.0 ([#148](https://github.com/yschimke/compose-preview-xr/issues/148)) ([abd6f73](https://github.com/yschimke/compose-preview-xr/commit/abd6f7337dc1a5c4267073ebb1e06de5ba9063fe))
+* **deps:** update dependency ee.schimke.composeai:data-render-core to v3.45.0 ([#154](https://github.com/yschimke/compose-preview-xr/issues/154)) ([7206268](https://github.com/yschimke/compose-preview-xr/commit/720626869009f8183e76bbdafc7aed73f9377519))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.27.3 ([#124](https://github.com/yschimke/compose-preview-xr/issues/124)) ([7c448fe](https://github.com/yschimke/compose-preview-xr/commit/7c448feb9ed24ea5a8a06d3c145b5802303baf6f))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.27.4 ([#125](https://github.com/yschimke/compose-preview-xr/issues/125)) ([b8d857a](https://github.com/yschimke/compose-preview-xr/commit/b8d857a9503e2e433547e9cae4fb799d6690b7ed))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.27.7 ([#132](https://github.com/yschimke/compose-preview-xr/issues/132)) ([9b7e165](https://github.com/yschimke/compose-preview-xr/commit/9b7e165b36594b9bc522fb77822a614685664c45))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.28.0 ([#139](https://github.com/yschimke/compose-preview-xr/issues/139)) ([f7377c3](https://github.com/yschimke/compose-preview-xr/commit/f7377c3af8c23696839c4667a357bfa59ecac3ef))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.28.1 ([#150](https://github.com/yschimke/compose-preview-xr/issues/150)) ([b4d6cf0](https://github.com/yschimke/compose-preview-xr/commit/b4d6cf02a7b22c5d07ec2745f81160d36b5aeace))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.28.2 ([#156](https://github.com/yschimke/compose-preview-xr/issues/156)) ([e51a6e6](https://github.com/yschimke/compose-preview-xr/commit/e51a6e698528dfea71e9668c6df7339d17fc72d1))
+* **deps:** update dependency org.robolectric:robolectric to v4.18 ([#135](https://github.com/yschimke/compose-preview-xr/issues/135)) ([97d7b95](https://github.com/yschimke/compose-preview-xr/commit/97d7b95f15d89be505089cd2c79c5cdc959387df))
+* **deps:** update roborazzi to v1.78.0 ([#123](https://github.com/yschimke/compose-preview-xr/issues/123)) ([9fcddbb](https://github.com/yschimke/compose-preview-xr/commit/9fcddbbb749bc775bfe75e5044c832322f299db9))
+* **deps:** update roborazzi to v1.79.0 ([#130](https://github.com/yschimke/compose-preview-xr/issues/130)) ([1946c61](https://github.com/yschimke/compose-preview-xr/commit/1946c619c531aa8a181cec08a19019bcb102973e))
+* **xr-composite:** install non-fatal X11 error handler for Filament GLX version probe ([#155](https://github.com/yschimke/compose-preview-xr/issues/155)) ([41126c4](https://github.com/yschimke/compose-preview-xr/commit/41126c483d52949e99716bc5017b196f188fb523))
+
 ## [2.0.4](https://github.com/yschimke/compose-preview-xr/compare/v2.0.3...v2.0.4) (2026-11-06)
 
 
