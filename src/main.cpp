@@ -64,6 +64,10 @@
 #include <string>
 #include <vector>
 
+#if defined(__linux__)
+#include <dlfcn.h>
+#endif
+
 // Short alias for the generated protocol vocabulary. Both sides of this boundary are generated
 // from schema/xr-render-service.schema.json, so a renamed method or param key is a compile error
 // here rather than a runtime mismatch against a client built from a different commit.
@@ -269,6 +273,21 @@ struct SharedGl {
   Material* shadow = nullptr;
 
   bool create(const std::string& materialsDir) {
+#if defined(__linux__)
+    // Filament 1.80.1's PlatformGLX probes OpenGL 4.6 down to 4.1 via glXCreateContextAttribsARB
+    // without installing an X11 error handler. On drivers that cap below 4.6 (such as Mesa
+    // llvmpipe under Xvfb), the first unsupported version raises GLXBadFBConfig and Xlib's
+    // default error handler exits the process before the fallback loop can try 4.5..4.1.
+    // Keep a non-fatal error handler installed so PlatformGLX's version fallback completes.
+    if (void* x11 = dlopen("libX11.so.6", RTLD_LAZY)) {
+      using XErrorHandlerFn = int (*)(void*, void*);
+      using XSetErrorHandlerFn = XErrorHandlerFn (*)(XErrorHandlerFn);
+      if (auto setHandler =
+              reinterpret_cast<XSetErrorHandlerFn>(dlsym(x11, "XSetErrorHandler"))) {
+        setHandler([](void*, void*) -> int { return 0; });
+      }
+    }
+#endif
     engine = Engine::Builder().backend(backend::Backend::OPENGL).build();
     if (!engine) { fprintf(stderr, "engine create failed\n"); return false; }
     renderer = engine->createRenderer();
