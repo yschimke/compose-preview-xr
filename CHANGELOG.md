@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.6](https://github.com/yschimke/compose-preview-xr/compare/v2.0.5...v2.0.6) (2026-11-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ee.schimke.composeai:data-render-core to v3.46.0 ([#159](https://github.com/yschimke/compose-preview-xr/issues/159)) ([2b756cd](https://github.com/yschimke/compose-preview-xr/commit/2b756cd695efe9cdd70bea523bfcd27ab71345a4))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.29.0 ([#160](https://github.com/yschimke/compose-preview-xr/issues/160)) ([34a45ff](https://github.com/yschimke/compose-preview-xr/commit/34a45ff09c277c9b4ba6ece9ad1fe84c6d5b076b))
+
 ## [2.0.5](https://github.com/yschimke/compose-preview-xr/compare/v2.0.4...v2.0.5) (2026-11-21)
 
 
