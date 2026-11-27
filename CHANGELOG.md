@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.0.7](https://github.com/yschimke/compose-preview-xr/compare/v2.0.6...v2.0.7) (2026-11-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ee.schimke.composeai:data-render-core to v3.47.0 ([#167](https://github.com/yschimke/compose-preview-xr/issues/167)) ([742c2c9](https://github.com/yschimke/compose-preview-xr/commit/742c2c9f7de2fa4243c56f30c72dda05df29bcd2))
+* **deps:** update dependency ee.schimke.composeai:renderer-android to v3.29.1 ([#166](https://github.com/yschimke/compose-preview-xr/issues/166)) ([e465056](https://github.com/yschimke/compose-preview-xr/commit/e465056c66bd2cbfe06e87d63b6b99df3590a9f5))
+* **deps:** update dependency org.robolectric:robolectric to v4.18.1 ([#164](https://github.com/yschimke/compose-preview-xr/issues/164)) ([80c15d2](https://github.com/yschimke/compose-preview-xr/commit/80c15d2bfbd22e9b81b36194dc34b7fb1e64ca35))
+
 ## [2.0.6](https://github.com/yschimke/compose-preview-xr/compare/v2.0.5...v2.0.6) (2026-11-24)
 
 
